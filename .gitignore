@@ -9,9 +9,6 @@ yarn-error.log*
 build/
 dist/
 
-# Vercel deployment (keep out directory)
-# out/
-
 # Environment variables
 .env
 .env.local
