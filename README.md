@@ -117,6 +117,6 @@ For questions about this website, please contact Nawa Sohail.
 
 ---
 
-*Built with ❤️ for the literary world*
+
 
 **Last Updated**: CSS issues resolved with Tailwind CSS v3 - ready for deployment! 
