@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // App Router is now stable in Next.js 15, no experimental config needed
+  // Ensure static export works properly
+  output: 'export',
+  // Disable image optimization for static export
+  images: {
+    unoptimized: true,
+  },
+  // Ensure trailing slash for static hosting
+  trailingSlash: true,
 }
 
 module.exports = nextConfig 
