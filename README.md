@@ -103,7 +103,7 @@ npm run export
 
 - **Next.js 15** - React framework
 - **TypeScript** - Type safety
-- **Tailwind CSS** - Utility-first CSS framework
+- **Tailwind CSS v3** - Utility-first CSS framework (stable version)
 - **React 19** - UI library
 - **PostCSS** - CSS processing
 
@@ -117,4 +117,6 @@ For questions about this website, please contact Nawa Sohail.
 
 ---
 
-*Built with ❤️ for the literary world* 
+*Built with ❤️ for the literary world*
+
+**Last Updated**: CSS issues resolved with Tailwind CSS v3 - ready for deployment! 
