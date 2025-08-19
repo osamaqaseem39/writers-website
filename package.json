@@ -1,0 +1,15 @@
+{
+  "name": "nawa-sohail-writer",
+  "version": "1.0.0",
+  "description": "Official website for writer Nawa Sohail",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": ["writer", "author", "books", "literature"],
+  "author": "Nawa Sohail",
+  "license": "ISC"
+}
