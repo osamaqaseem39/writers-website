@@ -1,4 +1,14 @@
+'use client'
+
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+
 export function Books() {
+  const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
+  const { ref: bookCardRef, isVisible: bookCardVisible } = useScrollAnimation()
+  const { ref: bookImageRef, isVisible: bookImageVisible } = useScrollAnimation()
+  const { ref: bookDetailsRef, isVisible: bookDetailsVisible } = useScrollAnimation()
+  const { ref: buttonsRef, isVisible: buttonsVisible } = useScrollAnimation()
+
   const book = {
     title: "You Never Cried",
     genre: "Fiction",
@@ -24,7 +34,10 @@ export function Books() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 scroll-animate ${titleVisible ? 'animate-in' : ''}`}
+        >
           <h2 className="text-mobile-4xl md:text-5xl lg:text-6xl font-bold text-brand-900 mb-6 font-jost">
             My <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-600">Book</span>
           </h2>
@@ -37,10 +50,16 @@ export function Books() {
 
         {/* Single Book Display */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-12 shadow-2xl">
+          <div 
+            ref={bookCardRef}
+            className={`bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-12 shadow-2xl scroll-animate ${bookCardVisible ? 'animate-in' : ''}`}
+          >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Book Cover/Visual */}
-              <div className="text-center lg:text-left">
+              <div 
+                ref={bookImageRef}
+                className={`text-center lg:text-left scroll-animate-scale scroll-animate-delay-200 ${bookImageVisible ? 'animate-in' : ''}`}
+              >
                 <div className="relative inline-block group">
                   {/* Elegant book frame */}
                   <div className="absolute -inset-8 bg-gradient-to-br from-brand-200 via-brand-300 to-brand-400 rounded-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
@@ -60,7 +79,10 @@ export function Books() {
               </div>
 
               {/* Book Details */}
-              <div className="space-y-8">
+              <div 
+                ref={bookDetailsRef}
+                className={`space-y-8 scroll-animate-left scroll-animate-delay-300 ${bookDetailsVisible ? 'animate-in' : ''}`}
+              >
                 <div>
                   <h3 className="text-4xl font-serif text-brand-900 mb-4">{book.title}</h3>
                   <div className="flex items-center space-x-4 mb-6">
@@ -83,7 +105,10 @@ export function Books() {
 
 
                 {/* Action Buttons */}
-                <div className="space-y-4">
+                <div 
+                  ref={buttonsRef}
+                  className={`space-y-4 scroll-animate scroll-animate-delay-500 ${buttonsVisible ? 'animate-in' : ''}`}
+                >
                   <a href="/book/1" className="block w-full text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-r from-brand-500 to-brand-600 text-center">
                     Buy Now
                   </a>

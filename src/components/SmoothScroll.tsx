@@ -19,6 +19,8 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     try {
       lenis = new Lenis()
 
+      // Lenis will handle the scrolling, no need to hide overflow
+
       // Animation frame loop
       const raf = (time: number) => {
         if (lenis) {
@@ -49,6 +51,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
         if (lenis) {
           lenis.destroy()
         }
+        // Cleanup handled by Lenis
         ;(window as any).lenis = null
       }
     } catch (error) {
