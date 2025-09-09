@@ -21,7 +21,7 @@ function ReviewCard({ review }: { review: Review }) {
 
   return (
     <div className="group">
-      <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-8 shadow-lg h-full transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 flex flex-col">
+      <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-8 shadow-lg h-96 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 flex flex-col">
         {/* Rating Stars */}
         <div className="flex items-center mb-4">
           {[...Array(5)].map((_, i) => (
@@ -36,8 +36,8 @@ function ReviewCard({ review }: { review: Review }) {
         </div>
 
         {/* Review Text Container */}
-        <div className="flex-1 flex flex-col">
-          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-96 overflow-y-auto' : 'max-h-32'}`}>
+        <div className="flex-1 flex flex-col min-h-0">
+          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-brand-400 scrollbar-track-brand-100 pr-2' : 'max-h-32'}`}>
             <p className="text-brand-800 leading-relaxed italic">
               "{isExpanded ? review.text : review.shortText}"
             </p>
