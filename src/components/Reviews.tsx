@@ -36,7 +36,7 @@ function ReviewCard({ review }: { review: Review }) {
         </div>
 
         {/* Review Text Container */}
-        <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 flex flex-col">
           <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-brand-400 scrollbar-track-brand-100 pr-2' : 'max-h-32'}`}>
             <p className="text-brand-800 leading-relaxed italic">
               "{isExpanded ? review.text : review.shortText}"
