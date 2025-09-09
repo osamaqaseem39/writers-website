@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 
 interface Review {
@@ -9,19 +8,13 @@ interface Review {
   location: string
   rating: number
   text: string
-  shortText: string
   avatar: string
 }
 
 function ReviewCard({ review }: { review: Review }) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  
-  // Check if button should be shown
-  const shouldShowButton = review.text !== review.shortText
-
   return (
     <div className="group">
-      <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-8 shadow-lg h-full transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 flex flex-col">
+      <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-6 shadow-lg h-80 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 flex flex-col">
         {/* Rating Stars */}
         <div className="flex items-center mb-4">
           {[...Array(5)].map((_, i) => (
@@ -35,33 +28,23 @@ function ReviewCard({ review }: { review: Review }) {
           ))}
         </div>
 
-        {/* Review Text Container */}
-        <div className="flex-1 flex flex-col">
-          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-96 overflow-y-auto' : 'max-h-32'}`}>
+        {/* Review Text Container - Scrollable by default */}
+        <div className="flex-1 flex flex-col min-h-0">
+          <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-brand-400 scrollbar-track-brand-100 pr-2">
             <p className="text-brand-800 leading-relaxed italic">
-              "{isExpanded ? review.text : review.shortText}"
+              "{review.text}"
             </p>
           </div>
-          
-          {/* Read More/Read Less Button */}
-          {shouldShowButton && (
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="mt-3 text-brand-600 hover:text-brand-700 text-sm font-medium transition-colors duration-200 self-start underline hover:no-underline cursor-pointer bg-brand-50 hover:bg-brand-100 px-3 py-1 rounded-md"
-            >
-              {isExpanded ? 'Read Less' : 'Read More'}
-            </button>
-          )}
         </div>
 
         {/* Reviewer Info */}
-        <div className="flex items-center mt-6">
-          <div className="w-12 h-12 rounded-full flex items-center justify-center text-2xl mr-4 bg-gradient-to-r from-brand-500 to-brand-600">
+        <div className="flex items-center mt-4 pt-4 border-t border-brand-200/30">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg mr-3 bg-gradient-to-r from-brand-500 to-brand-600">
             {review.avatar}
           </div>
           <div>
-            <h4 className="font-semibold text-brand-900">{review.name}</h4>
-            <p className="text-sm text-brand-600">{review.location}</p>
+            <h4 className="font-semibold text-brand-900 text-sm">{review.name}</h4>
+            <p className="text-xs text-brand-600">{review.location}</p>
           </div>
         </div>
       </div>
@@ -81,7 +64,6 @@ export function Reviews() {
       location: "2 reviews",
       rating: 5,
       text: "Do you believe in love? A question that's been asked throughout the annals of history of love. But do you believe in love when your very existence is shaken and betrayed by your blood? Do you believe, love can heal pain when wounds incurred by someone who you trust with your life? Can you offer love when you are hurt yourself? Do you think love is enough? Do you think love can fix everything? It's rare that I reread books and find it amusing and interesting, 'You never cried' by @read_at_nawa gave me pleasure in abundance. Author beautifully describes the scenic beauty of a little town in an English countryside where people live with love, peace and harmony. They enjoy their leisure time at cafe, bookstore, woods and mountains. They look after each other, there is so much peace and serenity in atmosphere. The protongonist Dan who's loving, goodlooking, single father who considers his daughter his only asset. He is somehow mysteriously sad and is trying to manage his monochrome life until his eyes meet someone in stary night, the night that will change everything is Dan's life. So grab your copies soon to discover this beautifully horrifying story. You might grasp from this paragraph it would be another love story but it isn't. It's blend of mystery, psychology, thriller, and suspense. Author keeps the suspense alive through out the last lines of the book. She brilliantly described psychological aspects of trauma and PTSD, how PTSD directs your decisions in life and how it haunts your future.",
-      shortText: "Do you believe in love? A question that's been asked throughout the annals of history of love. But do you believe in love when your very existence is shaken and betrayed by your blood? It's rare that I reread books and find it amusing and interesting, 'You never cried' by @read_at_nawa gave me pleasure in abundance.",
       avatar: "👤"
     },
     {
@@ -90,7 +72,6 @@ export function Reviews() {
       location: "1 review",
       rating: 5,
       text: "Amazing portrayal of emotions. I literally felt every part of it. The plot, the buildup, the happy moments, the sad parts, the painful scenes—everything felt like it was happening to me personally. I'm also amazed at how the writer presented something that is considered taboo in our society, but should actually be taught from the very beginning. Hats off to the courage and effort. An amazing piece of art. I really appreciate the quality and dedication put into it. Definitely a recommendation for every soulful reader.",
-      shortText: "Amazing portrayal of emotions. I literally felt every part of it. The plot, the buildup, the happy moments, the sad parts, the painful scenes—everything felt like it was happening to me personally.",
       avatar: "👤"
     },
     {
@@ -99,7 +80,6 @@ export function Reviews() {
       location: "1 review",
       rating: 5,
       text: "Beloved writer, I am not really good with words. But I just want to tell you. You did an excellent job. I mean, it was exactly what I was looking for. The story literally took my heart. It was really amazing!",
-      shortText: "Beloved writer, I am not really good with words. But I just want to tell you. You did an excellent job. I mean, it was exactly what I was looking for. The story literally took my heart. It was really amazing!",
       avatar: "👤"
     },
     {
@@ -108,7 +88,6 @@ export function Reviews() {
       location: "23 reviews",
       rating: 5,
       text: "'You never cried' is a reflection of the reality of how we humans want to escape from bitter incidents that happened in past, leaving ugly scars not only on our body but on our souls. Everyone has their own way to escape. Some harm others to get relief, some think that if they are sad no one has the right to stay happy. But some set the most beautiful example by not dwelling on dark past. They choose to never cry in front of others. This story revolves around a bookshop owner, named 'Daniel'. He is living a happy life with his mother and daughter in an aesthetically decorated house. He was widowed earlier. Apparently, Dan is tranquil with happenings of life. But In loneliness, he finds his life incomplete. He craves to be loved like many others. Then, the story adds a new character 'Rose' in Dan's town. Rose's innocence impresses him. Their multiple meetups show how two incomplete persons together complete the meaning of life. Rose's character adds an intriguing twist into story. This story tells readers that how one person's mistake can let hate to run in generations. How sweet people aren't always who they seem to be. How love makes you selfless not selfish. This book's compelling narrative and vivid details show how writer's heart resonates deeply. But for me, this book always be remembered for Dan's bookstore where he has coffee and huge variety of books😭 and Nan's (Dan's mother) iconic bob cut, liveliness and lantern. Joe's character is my favourite as he has soft corner in heart for others when their own loved ones let them down. He is a king without crown👑.",
-      shortText: "'You never cried' is a reflection of the reality of how we humans want to escape from bitter incidents that happened in past, leaving ugly scars not only on our body but on our souls. This story revolves around a bookshop owner, named 'Daniel'.",
       avatar: "👤"
     },
     {
@@ -117,7 +96,6 @@ export function Reviews() {
       location: "1 review",
       rating: 5,
       text: "You Never Cried is an emotionally rich story that seamlessly blends romance, mystery, and thriller elements, creating a beautiful journey between Dan and Rose. At its core, the book explores raw human emotions —all delicately woven into Dan and Rose's evolving relationship. The story unfolds with an air of gentle intimacy, yet there's an undeniable sense of suspense, making each chapter more gripping than the last. The way the romance and mystery intertwine keeps the reader engaged, balancing heartwarming moments with thrilling unpredictability. The writing style is smooth and evocative, creating a dreamy yet suspenseful ambiance. One of the book's strongest elements is its emotional depth. The reader is constantly taken on an emotional rollercoaster, experiencing joy, frustration, and anticipation. The cliffhangers are expertly placed, keeping the suspense alive without feeling forced. ⭐ 4.5/5 – You Never Cried is a beautiful mix of cozy romance and heart-pounding mystery, filled with well-crafted emotions, deep character connections, and masterful storytelling. Also, the book cover very well sums up the theme of the whole story.",
-      shortText: "You Never Cried is an emotionally rich story that seamlessly blends romance, mystery, and thriller elements, creating a beautiful journey between Dan and Rose. ⭐ 4.5/5 – You Never Cried is a beautiful mix of cozy romance and heart-pounding mystery.",
       avatar: "👤"
     },
     {
@@ -126,7 +104,6 @@ export function Reviews() {
       location: "1 review",
       rating: 5,
       text: "Just finished reading You Never Cried by Nawa Sohail, and my mind is still reeling. It's an emotional roller coaster—set in a quaint small town with fuzzy cottage-like houses, hilltops, the scent of freshly baked cookies, blooming flowers, and warmth that wraps around you—yet beneath it all lie past traumas, unhealed scars, broken hearts, and emotions left unspoken. Nawa's writing is both powerful and tender. Her way with words and the depth with which she expresses emotions is truly remarkable. She transports you into another world—one that's beautiful on the surface but quietly shadowed by pain. The story keeps you hooked till the very end, and the cliffhanger leaves you aching for more. I'm in awe of how effortlessly Nawa brings difficult emotions to life, breathing soul into her characters and letting them linger in your heart long after you've turned the last page. A must-read. I can't wait to see what she writes next.",
-      shortText: "Just finished reading You Never Cried by Nawa Sohail, and my mind is still reeling. It's an emotional roller coaster—set in a quaint small town with fuzzy cottage-like houses, hilltops, the scent of freshly baked cookies.",
       avatar: "👤"
     },
   ]
