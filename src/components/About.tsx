@@ -80,65 +80,6 @@ export function About() {
           </div>
         </div>
 
-        {/* Personal Favorites Section */}
-        <div className="mt-16">
-          <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-serif text-brand-900 mb-6 text-center">My Personal Favorites</h2>
-            <p className="text-lg text-brand-700 text-center mb-8 max-w-3xl mx-auto">
-              Books that have shaped my perspective and inspired my storytelling journey.
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Favorite Book 1 */}
-              <div className="bg-gradient-to-br from-brand-50 to-brand-100 rounded-2xl p-6 border border-brand-200/50 hover:shadow-lg transition-all duration-300">
-                <div className="flex items-start space-x-4">
-                  <div className="w-16 h-20 bg-gradient-to-br from-brand-200 to-brand-300 rounded-lg flex items-center justify-center text-brand-600 font-bold text-sm">
-                    Book
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-brand-900 mb-1">Pride and Prejudice</h3>
-                    <p className="text-sm text-brand-600 mb-2">by Jane Austen</p>
-                    <p className="text-sm text-brand-700">A timeless exploration of love and personal growth that continues to inspire my romantic writing.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Favorite Book 2 */}
-              <div className="bg-gradient-to-br from-brand-50 to-brand-100 rounded-2xl p-6 border border-brand-200/50 hover:shadow-lg transition-all duration-300">
-                <div className="flex items-start space-x-4">
-                  <div className="w-16 h-20 bg-gradient-to-br from-brand-200 to-brand-300 rounded-lg flex items-center justify-center text-brand-600 font-bold text-sm">
-                    Book
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-brand-900 mb-1">The Great Gatsby</h3>
-                    <p className="text-sm text-brand-600 mb-2">by F. Scott Fitzgerald</p>
-                    <p className="text-sm text-brand-700">The atmospheric prose taught me the power of setting and mood in storytelling.</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Favorite Book 3 */}
-              <div className="bg-gradient-to-br from-brand-50 to-brand-100 rounded-2xl p-6 border border-brand-200/50 hover:shadow-lg transition-all duration-300">
-                <div className="flex items-start space-x-4">
-                  <div className="w-16 h-20 bg-gradient-to-br from-brand-200 to-brand-300 rounded-lg flex items-center justify-center text-brand-600 font-bold text-sm">
-                    Book
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-brand-900 mb-1">The Night Circus</h3>
-                    <p className="text-sm text-brand-600 mb-2">by Erin Morgenstern</p>
-                    <p className="text-sm text-brand-700">A magical tale that showed me how to weave mystery and romance into an enchanting narrative.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 text-center">
-              <p className="text-brand-600 italic">
-                "These books have been my teachers, my companions, and my inspiration."
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   )

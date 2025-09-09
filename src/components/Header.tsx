@@ -24,16 +24,19 @@ export function Header() {
 
     e.preventDefault()
 
-    const lenis = typeof window !== 'undefined' ? (window as any).lenis : null
-    if (lenis && typeof lenis.scrollTo === 'function') {
-      lenis.scrollTo(targetElement, { offset: -80, duration: 1.2 })
-    } else {
-      const headerHeight = typeof window !== 'undefined' ? (window.innerWidth >= 1024 ? 96 : 64) : 80
-      const rect = targetElement.getBoundingClientRect()
-      const currentScroll = window.pageYOffset || document.documentElement.scrollTop
-      const targetY = rect.top + currentScroll - headerHeight
-      window.scrollTo({ top: targetY, behavior: 'smooth' })
-    }
+    // Wait a bit for Lenis to be available
+    setTimeout(() => {
+      const lenis = typeof window !== 'undefined' ? (window as any).lenis : null
+      if (lenis && typeof lenis.scrollTo === 'function') {
+        lenis.scrollTo(targetElement, { offset: -80, duration: 1.2 })
+      } else {
+        const headerHeight = typeof window !== 'undefined' ? (window.innerWidth >= 1024 ? 96 : 64) : 80
+        const rect = targetElement.getBoundingClientRect()
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop
+        const targetY = rect.top + currentScroll - headerHeight
+        window.scrollTo({ top: targetY, behavior: 'smooth' })
+      }
+    }, 100)
 
     setIsMenuOpen(false)
   }

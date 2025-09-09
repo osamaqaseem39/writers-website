@@ -32,6 +32,17 @@
     overscroll-behavior: contain;
   }
 
+  /* Prevent flash of unstyled content during hydration */
+  html {
+    visibility: visible;
+  }
+
+  /* Ensure smooth transition when Lenis loads */
+  body {
+    opacity: 1;
+    transition: opacity 0.1s ease-in-out;
+  }
+
   /* Screen scaling for better responsiveness */
   @media (min-width: 1920px) {
     html {

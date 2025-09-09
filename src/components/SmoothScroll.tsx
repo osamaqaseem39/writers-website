@@ -1,40 +1,62 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Lenis from '@studio-freight/lenis'
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
+  const [isClient, setIsClient] = useState(false)
+
   useEffect(() => {
-    const lenis = new Lenis()
+    setIsClient(true)
+  }, [])
 
-    // Animation frame loop
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
+  useEffect(() => {
+    if (!isClient || typeof window === 'undefined') return
 
-    requestAnimationFrame(raf)
+    let lenis: any = null
+    let rafId: number | null = null
 
-    // Handle resize
-    const handleResize = () => {
-      lenis.resize()
-    }
+    try {
+      lenis = new Lenis()
 
-    window.addEventListener('resize', handleResize)
+      // Animation frame loop
+      const raf = (time: number) => {
+        if (lenis) {
+          lenis.raf(time)
+        }
+        rafId = requestAnimationFrame(raf)
+      }
 
-    // Expose lenis globally for debugging
-    if (typeof window !== 'undefined') {
+      rafId = requestAnimationFrame(raf)
+
+      // Handle resize
+      const handleResize = () => {
+        if (lenis) {
+          lenis.resize()
+        }
+      }
+
+      window.addEventListener('resize', handleResize)
+
+      // Expose lenis globally for debugging
       ;(window as any).lenis = lenis
-    }
 
-    return () => {
-      window.removeEventListener('resize', handleResize)
-      lenis.destroy()
-      if (typeof window !== 'undefined') {
+      return () => {
+        window.removeEventListener('resize', handleResize)
+        if (rafId) {
+          cancelAnimationFrame(rafId)
+        }
+        if (lenis) {
+          lenis.destroy()
+        }
         ;(window as any).lenis = null
       }
+    } catch (error) {
+      console.warn('Lenis failed to initialize:', error)
+      // Fallback to native smooth scroll
+      document.documentElement.style.scrollBehavior = 'smooth'
     }
-  }, [])
+  }, [isClient])
 
   return <>{children}</>
 }
