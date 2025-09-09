@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 
 interface Review {
   id: number
@@ -14,6 +15,9 @@ interface Review {
 
 function ReviewCard({ review }: { review: Review }) {
   const [isExpanded, setIsExpanded] = useState(false)
+  
+  // Check if button should be shown
+  const shouldShowButton = review.text !== review.shortText
 
   return (
     <div className="group">
@@ -33,17 +37,17 @@ function ReviewCard({ review }: { review: Review }) {
 
         {/* Review Text Container */}
         <div className="flex-1 flex flex-col">
-          <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-96 overflow-y-auto' : 'max-h-32'}`}>
+          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-96 overflow-y-auto' : 'max-h-32'}`}>
             <p className="text-brand-800 leading-relaxed italic">
               "{isExpanded ? review.text : review.shortText}"
             </p>
           </div>
           
           {/* Read More/Read Less Button */}
-          {review.text !== review.shortText && (
+          {shouldShowButton && (
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="mt-3 text-brand-600 hover:text-brand-700 text-sm font-medium transition-colors duration-200 self-start"
+              className="mt-3 text-brand-600 hover:text-brand-700 text-sm font-medium transition-colors duration-200 self-start underline hover:no-underline cursor-pointer bg-brand-50 hover:bg-brand-100 px-3 py-1 rounded-md"
             >
               {isExpanded ? 'Read Less' : 'Read More'}
             </button>
@@ -66,6 +70,10 @@ function ReviewCard({ review }: { review: Review }) {
 }
 
 export function Reviews() {
+  const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
+  const { ref: reviewsRef, isVisible: reviewsVisible } = useScrollAnimation()
+  const { ref: ratingRef, isVisible: ratingVisible } = useScrollAnimation()
+
   const reviews = [
     {
       id: 1,
@@ -133,7 +141,10 @@ export function Reviews() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 scroll-animate ${titleVisible ? 'animate-in' : ''}`}
+        >
           <h2 className="text-mobile-4xl md:text-5xl lg:text-6xl font-bold text-brand-900 mb-6 font-jost">
             What Readers <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-600">Say</span>
           </h2>
@@ -145,14 +156,20 @@ export function Reviews() {
         </div>
 
         {/* Reviews Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div 
+          ref={reviewsRef}
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 scroll-animate scroll-animate-delay-200 ${reviewsVisible ? 'animate-in' : ''}`}
+        >
           {reviews.map((review) => (
             <ReviewCard key={review.id} review={review} />
           ))}
         </div>
 
         {/* Overall Rating */}
-        <div className="text-center">
+        <div 
+          ref={ratingRef}
+          className={`text-center scroll-animate scroll-animate-delay-400 ${ratingVisible ? 'animate-in' : ''}`}
+        >
           <div className="bg-white/70 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-10 shadow-lg max-w-2xl mx-auto">
             <h3 className="text-3xl font-serif text-brand-900 mb-4">
               Overall Rating

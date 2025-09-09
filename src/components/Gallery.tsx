@@ -1,4 +1,12 @@
+'use client'
+
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+
 export function Gallery() {
+  const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
+  const { ref: galleryRef, isVisible: galleryVisible } = useScrollAnimation()
+  const { ref: ctaRef, isVisible: ctaVisible } = useScrollAnimation()
+
   const galleryImages = [
     {
       id: 1,
@@ -54,7 +62,10 @@ export function Gallery() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 scroll-animate ${titleVisible ? 'animate-in' : ''}`}
+        >
           <h2 className="text-mobile-4xl md:text-5xl lg:text-6xl font-bold text-brand-900 mb-6 font-jost">
             Behind the <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-600">Scenes</span>
           </h2>
@@ -66,7 +77,10 @@ export function Gallery() {
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div 
+          ref={galleryRef}
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate ${galleryVisible ? 'animate-in' : ''}`}
+        >
           {galleryImages.map((image) => (
             <div key={image.id} className="group">
               <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white/80 backdrop-blur-sm border border-brand-200/50">
@@ -95,7 +109,10 @@ export function Gallery() {
         </div>
 
         {/* Call to Action */}
-        <div className="text-center mt-16">
+        <div 
+          ref={ctaRef}
+          className={`text-center mt-16 scroll-animate scroll-animate-delay-300 ${ctaVisible ? 'animate-in' : ''}`}
+        >
           <div className="bg-white/70 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-10 shadow-lg max-w-2xl mx-auto">
             <h3 className="text-3xl font-serif text-brand-900 mb-4">
               Follow My Journey

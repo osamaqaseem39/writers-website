@@ -1,4 +1,13 @@
+'use client'
+
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+
 export function Blog() {
+  const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
+  const { ref: featuredRef, isVisible: featuredVisible } = useScrollAnimation()
+  const { ref: postsRef, isVisible: postsVisible } = useScrollAnimation()
+  const { ref: ctaRef, isVisible: ctaVisible } = useScrollAnimation()
+
   const blogPosts = [
     {
       id: 1,
@@ -52,7 +61,10 @@ export function Blog() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 scroll-animate ${titleVisible ? 'animate-in' : ''}`}
+        >
           <h2 className="text-mobile-4xl md:text-5xl lg:text-6xl font-bold text-brand-900 mb-6 font-jost">
             Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-600">Blog</span>
           </h2>
@@ -65,7 +77,10 @@ export function Blog() {
         </div>
 
         {/* Featured Post */}
-        <div className="mb-16">
+        <div 
+          ref={featuredRef}
+          className={`mb-16 scroll-animate-scale scroll-animate-delay-200 ${featuredVisible ? 'animate-in' : ''}`}
+        >
           {blogPosts.filter(post => post.featured).map((post) => (
             <div key={post.id} className="group">
               <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl transition-all duration-300 group-hover:bg-white/90 group-hover:scale-[1.02]">
@@ -108,7 +123,10 @@ export function Blog() {
         </div>
 
         {/* Other Blog Posts */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div 
+          ref={postsRef}
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 scroll-animate scroll-animate-delay-300 ${postsVisible ? 'animate-in' : ''}`}
+        >
           {blogPosts.filter(post => !post.featured).map((post) => (
             <div key={post.id} className="group">
               <div className="bg-white/70 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-6 shadow-lg transition-all duration-300 group-hover:bg-white/80 group-hover:scale-105 group-hover:shadow-2xl h-full">
@@ -150,7 +168,10 @@ export function Blog() {
         </div>
 
         {/* View All Posts Button */}
-        <div className="text-center">
+        <div 
+          ref={ctaRef}
+          className={`text-center scroll-animate scroll-animate-delay-500 ${ctaVisible ? 'animate-in' : ''}`}
+        >
           <button className="border-2 border-brand-300 text-brand-800 hover:bg-brand-50 px-8 py-4 rounded-xl font-semibold text-lg backdrop-blur-sm transition-all duration-300 hover:border-brand-400">
             View All Blog Posts
           </button>

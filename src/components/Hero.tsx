@@ -1,6 +1,6 @@
 export function Hero() {
   return (
-    <section id="home" className="min-h-screen bg-gradient-to-br from-brand-50 via-brand-100 to-brand-200 relative overflow-hidden">
+    <section id="home" className="h-screen bg-gradient-to-br from-brand-50 via-brand-100 to-brand-200 relative overflow-hidden">
       {/* Elegant Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-brand-200/20 to-brand-300/20 rounded-full blur-3xl animate-pulse"></div>
@@ -9,7 +9,7 @@ export function Hero() {
       </div>
 
       {/* Main Content Container */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 py-8">
+      <div className="relative z-10 h-full flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-7xl">
           {/* Desktop Layout - Classic Grid */}
           <div className="hidden lg:grid lg:grid-cols-12 lg:gap-12 xl:gap-16 items-center">

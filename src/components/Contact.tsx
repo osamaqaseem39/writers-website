@@ -1,8 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 
 export function Contact() {
+  const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
+  const { ref: infoRef, isVisible: infoVisible } = useScrollAnimation()
+  const { ref: formRef, isVisible: formVisible } = useScrollAnimation()
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,7 +37,10 @@ export function Contact() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
+        <div 
+          ref={titleRef}
+          className={`text-center mb-16 scroll-animate ${titleVisible ? 'animate-in' : ''}`}
+        >
           <h2 className="text-5xl md:text-6xl font-bold text-brand-900 mb-6">
             Get in <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-600">Touch</span>
           </h2>
@@ -45,7 +53,10 @@ export function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact Information */}
-          <div className="space-y-8">
+          <div 
+            ref={infoRef}
+            className={`space-y-8 scroll-animate-left scroll-animate-delay-200 ${infoVisible ? 'animate-in' : ''}`}
+          >
             <div>
               <h3 className="text-2xl font-bold text-brand-900 mb-6">Let's Connect</h3>
               <p className="text-brand-700 text-lg leading-relaxed mb-8">
@@ -102,7 +113,10 @@ export function Contact() {
           </div>
 
           {/* Contact Form */}
-          <div>
+          <div 
+            ref={formRef}
+            className={`scroll-animate-right scroll-animate-delay-300 ${formVisible ? 'animate-in' : ''}`}
+          >
             <div className="bg-white rounded-3xl p-8 border border-brand-200 shadow-2xl">
               <h3 className="text-2xl font-bold text-brand-900 mb-6">Send a Message</h3>
               

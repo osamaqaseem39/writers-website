@@ -3,7 +3,6 @@ import './globals.css'
 import { Footer } from '@/components/Footer'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { CartProvider } from '@/contexts/CartContext'
-import { SmoothScroll } from '@/components/SmoothScroll'
 
 export const metadata: Metadata = {
   title: 'Nawa Sohail - Writer & Author',
@@ -42,14 +41,12 @@ export default function RootLayout({
       <body className="antialiased font-jost">
         <AuthProvider>
           <CartProvider>
-            <SmoothScroll>
-              <div className="min-h-screen flex flex-col scale-screen">
-                <main className="flex-1">
-                  {children}
-                </main>
-                <Footer />
-              </div>
-            </SmoothScroll>
+            <div className="flex flex-col scale-screen min-h-screen">
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
           </CartProvider>
         </AuthProvider>
       </body>
