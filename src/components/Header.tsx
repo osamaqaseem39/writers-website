@@ -10,22 +10,6 @@ export function Header() {
   const { getTotalItems } = useCart()
 
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    const href = (e.currentTarget.getAttribute('href') || '').trim()
-    if (!href.startsWith('#')) return
-
-    const targetId = href.slice(1)
-    const targetElement = document.getElementById(targetId)
-    if (!targetElement) return
-
-    e.preventDefault()
-
-    // Use native smooth scrolling
-    const headerHeight = typeof window !== 'undefined' ? (window.innerWidth >= 1024 ? 96 : 64) : 80
-    const rect = targetElement.getBoundingClientRect()
-    const currentScroll = window.pageYOffset || document.documentElement.scrollTop
-    const targetY = rect.top + currentScroll - headerHeight
-    window.scrollTo({ top: targetY, behavior: 'smooth' })
-
     setIsMenuOpen(false)
   }
 

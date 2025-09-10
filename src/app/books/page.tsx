@@ -67,7 +67,7 @@ export default function BooksPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {books.map((book) => (
               <div key={book.id} className="group">
-                <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-6 shadow-lg h-full transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 flex flex-col">
+                <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-6 shadow-lg h-full transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105">
                   {/* Book Cover */}
                   <div className="relative mb-6">
                     <div className="absolute -inset-2 bg-gradient-to-br from-brand-200 via-brand-300 to-brand-400 rounded-xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
@@ -79,7 +79,7 @@ export default function BooksPage() {
                   </div>
 
                   {/* Book Info */}
-                  <div className="flex-1 flex flex-col">
+                  <div>
                     <div className="mb-4">
                       <h3 className="text-xl font-serif text-brand-900 mb-2">{book.title}</h3>
                       <p className="text-brand-600 mb-3">by {book.author}</p>
@@ -124,7 +124,7 @@ export default function BooksPage() {
                     </div>
 
                     {/* Price and Actions */}
-                    <div className="mt-auto">
+                    <div>
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-2xl font-bold text-brand-900">${book.price}</span>
                         <span className="text-sm text-brand-600">Free shipping</span>
