@@ -58,7 +58,7 @@ export function BookDetailClient({ id }: BookDetailClientProps) {
       <Header />
       <main className="pt-20 flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Book Cover Card */}
             <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl">
               <BookImage book={book} />
@@ -67,6 +67,37 @@ export function BookDetailClient({ id }: BookDetailClientProps) {
             {/* Book Details Card */}
             <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl">
               <BookDetails book={book} />
+            </div>
+
+            {/* Book Info Card */}
+            <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl">
+              <h3 className="text-xl font-serif text-brand-900 mb-6">Book Information</h3>
+              <div className="grid grid-cols-1 gap-4 text-sm">
+                <div>
+                  <span className="font-semibold text-brand-900">Genre:</span>
+                  <span className="ml-2 text-brand-700">{book.genre}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-brand-900">Year:</span>
+                  <span className="ml-2 text-brand-700">{book.year}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-brand-900">Pages:</span>
+                  <span className="ml-2 text-brand-700">{book.pages}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-brand-900">Reading Time:</span>
+                  <span className="ml-2 text-brand-700">{book.readingTime}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-brand-900">Publisher:</span>
+                  <span className="ml-2 text-brand-700">{book.publisher}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-brand-900">ISBN:</span>
+                  <span className="ml-2 text-brand-700">{book.isbn}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

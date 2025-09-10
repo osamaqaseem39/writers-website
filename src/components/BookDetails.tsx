@@ -32,7 +32,6 @@ interface BookDetailsProps {
 export function BookDetails({ book }: BookDetailsProps) {
   const router = useRouter()
   const [quantity, setQuantity] = useState(1)
-  const [selectedFormat, setSelectedFormat] = useState('hardcover')
   const { addToCart, isInCart } = useCart()
 
   const handleAddToCart = () => {
@@ -41,23 +40,24 @@ export function BookDetails({ book }: BookDetailsProps) {
       title: book.title,
       author: book.author,
       price: book.price,
-      format: selectedFormat,
+      format: 'hardcover',
       coverImage: book.coverImage
     })
   }
 
   const handleBuyNow = () => {
-    // Navigate to checkout
     router.push('/checkout')
   }
 
   return (
     <div className="space-y-6">
+      {/* Title and Author */}
       <div>
         <h1 className="text-4xl font-serif text-brand-900 mb-2">{book.title}</h1>
         <p className="text-xl text-brand-600 mb-4">by {book.author}</p>
         
-        <div className="flex items-center space-x-4 mb-4">
+        {/* Rating */}
+        <div className="flex items-center space-x-4 mb-6">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
               <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -70,63 +70,10 @@ export function BookDetails({ book }: BookDetailsProps) {
         </div>
       </div>
 
+      {/* Description */}
       <div className="space-y-4">
         <p className="text-brand-800 leading-relaxed">{book.description}</p>
         <p className="text-brand-800 leading-relaxed">{book.fullDescription}</p>
-      </div>
-
-      {/* Separator */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent my-8"></div>
-
-      {/* Book Details Grid */}
-      <div className="grid grid-cols-2 gap-4 text-sm">
-        <div>
-          <span className="font-semibold text-brand-900">Genre:</span>
-          <span className="ml-2 text-brand-700">{book.genre}</span>
-        </div>
-        <div>
-          <span className="font-semibold text-brand-900">Year:</span>
-          <span className="ml-2 text-brand-700">{book.year}</span>
-        </div>
-        <div>
-          <span className="font-semibold text-brand-900">Pages:</span>
-          <span className="ml-2 text-brand-700">{book.pages}</span>
-        </div>
-        <div>
-          <span className="font-semibold text-brand-900">Reading Time:</span>
-          <span className="ml-2 text-brand-700">{book.readingTime}</span>
-        </div>
-        <div>
-          <span className="font-semibold text-brand-900">Publisher:</span>
-          <span className="ml-2 text-brand-700">{book.publisher}</span>
-        </div>
-        <div>
-          <span className="font-semibold text-brand-900">ISBN:</span>
-          <span className="ml-2 text-brand-700">{book.isbn}</span>
-        </div>
-      </div>
-
-      {/* Separator */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent my-8"></div>
-
-      {/* Format Selection */}
-      <div>
-        <label className="block text-sm font-semibold text-brand-900 mb-2">Format:</label>
-        <div className="flex space-x-3">
-          {['hardcover', 'paperback', 'ebook'].map((format) => (
-            <button
-              key={format}
-              onClick={() => setSelectedFormat(format)}
-              className={`px-4 py-2 rounded-lg border-2 transition-all duration-300 ${
-                selectedFormat === format
-                  ? 'border-brand-500 bg-brand-50 text-brand-900'
-                  : 'border-brand-200 hover:border-brand-300 text-brand-700'
-              }`}
-            >
-              {format.charAt(0).toUpperCase() + format.slice(1)}
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* Separator */}
