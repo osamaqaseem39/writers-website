@@ -11,7 +11,7 @@ interface User {
 interface AuthContextType {
   user: User | null
   login: (email: string, password: string) => Promise<boolean>
-  register: (name: string, email: string, password: string) => Promise<boolean>
+  register: (name: string, email: string, password: string) => Promise<{ success: boolean; message?: string }>
   autoRegister: (email: string, firstName: string, lastName: string, phone: string) => Promise<{ success: boolean; isNewUser?: boolean; message?: string }>
   logout: () => void
   isLoading: boolean
@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const register = async (name: string, email: string, password: string): Promise<boolean> => {
+  const register = async (name: string, email: string, password: string): Promise<{ success: boolean; message?: string }> => {
     setIsLoading(true)
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/auth/register`, {
@@ -78,18 +78,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
       })
+      const data = await res.json()
       if (!res.ok) {
         setIsLoading(false)
-        return false
+        return { success: false, message: data?.message || data?.errors?.[0]?.msg || 'Registration failed' }
       }
-      const data = await res.json()
       localStorage.setItem('token', data.token)
       setUser(data.user)
       setIsLoading(false)
-      return true
+      return { success: true }
     } catch {
       setIsLoading(false)
-      return false
+      return { success: false, message: 'Network error. Please try again.' }
     }
   }
 

@@ -41,7 +41,7 @@ export function About() {
                     <span className="hidden sm:inline">Hi, I'm Nawa Sohail. I have always been in love with words, first as a student of English Literature, 
                     then as a teacher, and now as a storyteller. I hold an MPhil in English Literature and have taught 
                     English language and literature at several universities in Pakistan.</span>
-                    <span className="sm:hidden">Hi, I'm Nawa Sohail. A writer who loves words, holds an MPhil in English Literature, and teaches at universities in Pakistan.</span>
+                    <span className="sm:hidden">Hi, I'm Nawa Sohail. An author who loves words, holds an MPhil in English Literature, and teaches at universities in Pakistan.</span>
                   </p>
                   
                   <p className={`text-mobile-lg text-brand-800 leading-relaxed font-jost scroll-animate scroll-animate-delay-200 ${contentVisible ? 'animate-in' : ''}`}>

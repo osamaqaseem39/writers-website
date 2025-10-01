@@ -22,7 +22,7 @@ export function Blog() {
     {
       id: 2,
       title: "Finding Inspiration in Everyday Moments",
-      excerpt: "Discover how the mundane can become extraordinary when viewed through a writer's lens.",
+        excerpt: "Discover how the mundane can become extraordinary when viewed through an author's lens.",
       category: "Inspiration",
       date: "Dec 10, 2024",
       readTime: "4 min read",
@@ -70,7 +70,7 @@ export function Blog() {
           </h2>
           <p className="text-mobile-lg text-brand-800 max-w-3xl mx-auto font-jost">
             <span className="hidden sm:inline">Dive into my thoughts on writing, creativity, and the literary world. 
-            From practical tips to philosophical musings, there's something for every writer and reader.</span>
+            From practical tips to philosophical musings, there's something for every author and reader.</span>
             <span className="sm:hidden">My thoughts on writing, creativity, and the literary world.</span>
           </p>
           <div className="w-24 h-1 mx-auto rounded-full mt-6 bg-gradient-to-r from-brand-500 to-brand-600"></div>

@@ -48,11 +48,11 @@ export default function SignupPage() {
     setError('')
     setTouched({ name: true, email: true, password: true, confirmPassword: true })
     if (isFormInvalid) return
-    const ok = await register(name, email, password)
-    if (ok) {
+    const result = await register(name, email, password)
+    if (result.success) {
       router.push('/dashboard')
     } else {
-      setError('Could not sign up. Please check your details.')
+      setError(result.message || 'Could not sign up. Please check your details.')
     }
   }
 

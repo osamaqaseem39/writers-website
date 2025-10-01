@@ -60,7 +60,7 @@ export function Contact() {
             <div>
               <h3 className="text-2xl font-bold text-brand-900 mb-6">Let's Connect</h3>
               <p className="text-brand-700 text-lg leading-relaxed mb-8">
-                I'm always interested in hearing from readers, fellow writers, and anyone 
+                I'm always interested in hearing from readers, fellow authors, and anyone 
                 who shares a passion for storytelling. Whether you have feedback on my work, 
                 want to discuss a potential collaboration, or simply want to share your thoughts, 
                 I'm here to listen.

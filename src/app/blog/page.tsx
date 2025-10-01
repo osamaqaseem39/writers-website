@@ -30,7 +30,7 @@ export default function BlogPage() {
       id: 2,
       title: 'Finding Inspiration in Everyday Moments',
       excerpt:
-        "Discover how the mundane can become extraordinary when viewed through a writer's lens.",
+        "Discover how the mundane can become extraordinary when viewed through an author's lens.",
       category: 'Inspiration',
       date: 'Dec 10, 2024',
       readTime: '4 min read',

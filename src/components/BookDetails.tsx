@@ -53,8 +53,8 @@ export function BookDetails({ book }: BookDetailsProps) {
     <div className="space-y-6">
       {/* Title and Author */}
       <div>
-        <h1 className="text-4xl font-serif text-brand-900 mb-2">{book.title}</h1>
-        <p className="text-xl text-brand-600 mb-4">by {book.author}</p>
+        <h1 className="text-4xl font-serif text-navy mb-2">{book.title}</h1>
+        <p className="text-xl text-teal mb-4">by {book.author}</p>
         
         {/* Rating */}
         <div className="flex items-center space-x-4 mb-6">
@@ -64,35 +64,35 @@ export function BookDetails({ book }: BookDetailsProps) {
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
             ))}
-            <span className="ml-2 text-brand-700 font-medium">{book.rating}</span>
-            <span className="text-brand-500">({book.reviews} reviews)</span>
+            <span className="ml-2 text-navy font-medium">{book.rating}</span>
+            <span className="text-teal">({book.reviews} reviews)</span>
           </div>
         </div>
       </div>
 
       {/* Description */}
       <div className="space-y-4">
-        <p className="text-brand-800 leading-relaxed">{book.description}</p>
-        <p className="text-brand-800 leading-relaxed">{book.fullDescription}</p>
+        <p className="text-navy leading-relaxed">{book.description}</p>
+        <p className="text-navy leading-relaxed">{book.fullDescription}</p>
       </div>
 
       {/* Separator */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent my-8"></div>
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-skyblue to-transparent my-8"></div>
 
       {/* Quantity Selection */}
       <div>
-        <label className="block text-sm font-semibold text-brand-900 mb-2">Quantity:</label>
+        <label className="block text-sm font-semibold text-navy mb-2">Quantity:</label>
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="w-8 h-8 rounded-full bg-brand-100 hover:bg-brand-200 flex items-center justify-center text-brand-600"
+            className="w-8 h-8 rounded-full bg-skyblue hover:bg-teal flex items-center justify-center text-navy"
           >
             -
           </button>
-          <span className="text-lg font-medium text-brand-900 min-w-[2rem] text-center">{quantity}</span>
+          <span className="text-lg font-medium text-navy min-w-[2rem] text-center">{quantity}</span>
           <button
             onClick={() => setQuantity(quantity + 1)}
-            className="w-8 h-8 rounded-full bg-brand-100 hover:bg-brand-200 flex items-center justify-center text-brand-600"
+            className="w-8 h-8 rounded-full bg-skyblue hover:bg-teal flex items-center justify-center text-navy"
           >
             +
           </button>
@@ -100,19 +100,19 @@ export function BookDetails({ book }: BookDetailsProps) {
       </div>
 
       {/* Separator */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-brand-200 to-transparent my-8"></div>
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-skyblue to-transparent my-8"></div>
 
       {/* Price */}
       <div className="mb-8">
-        <div className="text-3xl font-bold text-brand-900">${book.price}</div>
-        <div className="text-sm text-brand-600">Free shipping on orders over $25</div>
+        <div className="text-3xl font-bold text-navy">${book.price}</div>
+        <div className="text-sm text-teal">Free shipping on orders over $25</div>
       </div>
 
       {/* Action Buttons */}
       <div className="space-y-4">
         <button
           onClick={handleBuyNow}
-          className="w-full bg-gradient-to-r from-brand-500 to-brand-600 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:scale-105"
+          className="w-full bg-gradient-to-r from-navy to-teal text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:scale-105"
         >
           Buy Now - ${(book.price * quantity).toFixed(2)}
         </button>
@@ -120,8 +120,8 @@ export function BookDetails({ book }: BookDetailsProps) {
           onClick={handleAddToCart}
           className={`w-full px-8 py-4 rounded-xl font-semibold text-lg border-2 transition-all duration-300 backdrop-blur-sm shadow-lg ${
             isInCart(book.id) 
-              ? 'bg-brand-500 text-white border-brand-500' 
-              : 'bg-white/80 hover:bg-white text-brand-800 border-brand-200 hover:border-brand-300'
+              ? 'bg-navy text-white border-navy' 
+              : 'bg-white/80 hover:bg-white text-navy border-teal hover:border-navy'
           }`}
         >
           {isInCart(book.id) ? 'Added to Cart ✓' : 'Add to Cart'}

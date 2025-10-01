@@ -5,9 +5,9 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { CartProvider } from '@/contexts/CartContext'
 
 export const metadata: Metadata = {
-  title: 'Nawa Sohail - Writer & Author',
-  description: 'Official website of writer and author Nawa Sohail. Coming soon with new works and literary insights.',
-  keywords: ['Nawa Sohail', 'writer', 'author', 'books', 'literature', 'coming soon'],
+  title: 'Nawa Sohail - Author',
+  description: 'Official website of author Nawa Sohail. Coming soon with new works and literary insights.',
+  keywords: ['Nawa Sohail', 'author', 'books', 'literature', 'coming soon'],
   authors: [{ name: 'Nawa Sohail' }],
   icons: {
     icon: '/favicon.ico',
@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     apple: '/favicon.ico',
   },
   openGraph: {
-    title: 'Nawa Sohail - Writer & Author',
-    description: 'Official website of writer and author Nawa Sohail. Coming soon with new works and literary insights.',
+    title: 'Nawa Sohail - Author',
+    description: 'Official website of author Nawa Sohail. Coming soon with new works and literary insights.',
     type: 'website',
   },
 }
@@ -41,7 +41,7 @@ export default function RootLayout({
       <body className="antialiased font-jost">
         <AuthProvider>
           <CartProvider>
-            <div className="flex flex-col scale-screen min-h-screen">
+            <div className="flex flex-col scale-screen">
               <main className="flex-1">
                 {children}
               </main>

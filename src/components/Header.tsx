@@ -33,14 +33,14 @@ export function Header() {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isScrolled 
-        ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-brand-200/50' 
-        : 'bg-gradient-to-r from-brand-50/90 via-brand-100/90 to-brand-200/90 backdrop-blur-sm border-b border-brand-200/30'
+        ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-teal/50' 
+        : 'bg-gradient-to-r from-skyblue/90 via-beige/90 to-white/90 backdrop-blur-sm border-b border-teal/30'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 md:h-24">
+        <div className="flex justify-between items-center h-16 md:h-20 lg:h-24">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <a href="/" className="w-24 h-8 md:w-40 md:h-14 overflow-hidden flex items-center justify-center">
+            <a href="/" className="w-20 h-6 sm:w-24 sm:h-8 md:w-32 md:h-10 lg:w-40 lg:h-14 overflow-hidden flex items-center justify-center">
               <img 
                 src="/logo.webp" 
                 alt="Nawa Sohail Logo" 
@@ -51,25 +51,25 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <a href="/" onClick={handleAnchorClick} className="text-brand-900 hover:text-brand-600 transition-all duration-300 font-light text-lg relative group">
+            <a href="/" onClick={handleAnchorClick} className="text-navy hover:text-teal transition-all duration-300 font-light text-lg relative group">
               Home
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-brand-500 to-brand-600"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-navy to-teal"></span>
             </a>
-            <a href="/about" onClick={handleAnchorClick} className="text-brand-900 hover:text-brand-600 transition-all duration-300 font-light text-lg relative group">
+            <a href="/about" onClick={handleAnchorClick} className="text-navy hover:text-teal transition-all duration-300 font-light text-lg relative group">
               About
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-brand-500 to-brand-600"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-navy to-teal"></span>
             </a>
-            <a href="/books" onClick={handleAnchorClick} className="text-brand-900 hover:text-brand-600 transition-all duration-300 font-light text-lg relative group">
+            <a href="/books" onClick={handleAnchorClick} className="text-navy hover:text-teal transition-all duration-300 font-light text-lg relative group">
               Books
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-brand-500 to-brand-600"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-navy to-teal"></span>
             </a>
-            <a href="/blog" onClick={handleAnchorClick} className="text-brand-900 hover:text-brand-600 transition-all duration-300 font-light text-lg relative group">
+            <a href="/blog" onClick={handleAnchorClick} className="text-navy hover:text-teal transition-all duration-300 font-light text-lg relative group">
               Blog
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-brand-500 to-brand-600"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-navy to-teal"></span>
             </a>
-            <a href="/contact" onClick={handleAnchorClick} className="text-brand-900 hover:text-brand-600 transition-all duration-300 font-light text-lg relative group">
+            <a href="/contact" onClick={handleAnchorClick} className="text-navy hover:text-teal transition-all duration-300 font-light text-lg relative group">
               Contact
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-brand-500 to-brand-600"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full bg-gradient-to-r from-navy to-teal"></span>
             </a>
             
           </nav>
@@ -78,7 +78,7 @@ export function Header() {
           <div className="hidden lg:flex items-center gap-3">
             <a
               href="/checkout"
-              className="relative inline-flex items-center gap-2 px-4 py-3 rounded-2xl font-medium text-brand-900 border border-brand-300 bg-white/70 backdrop-blur-sm hover:bg-white transition-all duration-300 shadow"
+              className="relative inline-flex items-center gap-2 px-4 py-3 rounded-2xl font-medium text-navy border border-skyblue bg-white/70 backdrop-blur-sm hover:bg-white transition-all duration-300 shadow"
               aria-label="View cart"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
@@ -87,12 +87,12 @@ export function Header() {
               </svg>
               <span>Cart</span>
               {getTotalItems() > 0 && (
-                <span className="absolute -top-2 -right-2 bg-brand-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-teal text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                   {getTotalItems()}
                 </span>
               )}
             </a>
-            <a href="/books" className="text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg bg-gradient-to-r from-brand-500 to-brand-600 inline-block">
+            <a href="/books" className="text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg bg-gradient-to-r from-navy to-teal inline-block">
               Shop Now
             </a>
           </div>
@@ -101,9 +101,10 @@ export function Header() {
           <div className="lg:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-brand-900 hover:text-brand-600 focus:outline-none focus:text-brand-600 transition-colors duration-300"
+              className="text-navy hover:text-teal focus:outline-none focus:text-teal transition-colors duration-300 p-2"
+              aria-label="Toggle menu"
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-6 w-6 sm:h-7 sm:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -116,29 +117,29 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-gradient-to-br from-brand-50/95 via-brand-100/95 to-brand-200/95 backdrop-blur-md border-b border-brand-200/50 shadow-lg">
-            <div className="px-4 py-6 space-y-2">
-              <a href="#home" onClick={handleAnchorClick} className="block px-4 py-3 text-brand-900 hover:text-brand-600 hover:bg-brand-100/50 transition-all duration-300 font-light text-lg rounded-xl">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-gradient-to-br from-skyblue/95 via-beige/95 to-white/95 backdrop-blur-md border-b border-teal/50 shadow-lg z-50">
+            <div className="px-4 py-4 space-y-1">
+              <a href="#home" onClick={handleAnchorClick} className="block px-4 py-3 text-navy hover:text-teal hover:bg-skyblue/50 transition-all duration-300 font-medium text-base rounded-xl">
                 Home
               </a>
-              <a href="/about" onClick={handleAnchorClick} className="block px-4 py-3 text-brand-900 hover:text-brand-600 hover:bg-brand-100/50 transition-all duration-300 font-light text-lg rounded-xl">
+              <a href="/about" onClick={handleAnchorClick} className="block px-4 py-3 text-navy hover:text-teal hover:bg-skyblue/50 transition-all duration-300 font-medium text-base rounded-xl">
                 About
               </a>
-              <a href="/books" onClick={handleAnchorClick} className="block px-4 py-3 text-brand-900 hover:text-brand-600 hover:bg-brand-100/50 transition-all duration-300 font-light text-lg rounded-xl">
+              <a href="/books" onClick={handleAnchorClick} className="block px-4 py-3 text-navy hover:text-teal hover:bg-skyblue/50 transition-all duration-300 font-medium text-base rounded-xl">
                 Books
               </a>
-              <a href="/blog" onClick={handleAnchorClick} className="block px-4 py-3 text-brand-900 hover:text-brand-600 hover:bg-brand-100/50 transition-all duration-300 font-light text-lg rounded-xl">
+              <a href="/blog" onClick={handleAnchorClick} className="block px-4 py-3 text-navy hover:text-teal hover:bg-skyblue/50 transition-all duration-300 font-medium text-base rounded-xl">
                 Blog
               </a>
-              <a href="/contact" onClick={handleAnchorClick} className="block px-4 py-3 text-brand-900 hover:text-brand-600 hover:bg-brand-100/50 transition-all duration-300 font-light text-lg rounded-xl">
+              <a href="/contact" onClick={handleAnchorClick} className="block px-4 py-3 text-navy hover:text-teal hover:bg-skyblue/50 transition-all duration-300 font-medium text-base rounded-xl">
                 Contact
               </a>
-              <a href="/checkout" onClick={handleAnchorClick} className="block px-4 py-3 text-brand-900 hover:text-brand-600 hover:bg-brand-100/50 transition-all duration-300 font-light text-lg rounded-xl">
+              <a href="/checkout" onClick={handleAnchorClick} className="block px-4 py-3 text-navy hover:text-teal hover:bg-skyblue/50 transition-all duration-300 font-medium text-base rounded-xl">
                 Cart
               </a>
               
-              <div className="px-4 py-3 pt-6">
-                <a href="/books" className="block w-full text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg bg-gradient-to-r from-brand-500 to-brand-600 text-center">
+              <div className="px-4 py-4 pt-6 border-t border-skyblue/30">
+                <a href="/books" className="block w-full text-white px-6 py-3 rounded-2xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg bg-gradient-to-r from-navy to-teal text-center text-base">
                   Shop Now
                 </a>
               </div>

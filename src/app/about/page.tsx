@@ -62,7 +62,7 @@ export default function AboutPage() {
         <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl">
           <h2 className="text-3xl font-serif text-brand-900 mb-8 text-center">My Personal Favorites</h2>
           <p className="text-lg text-brand-700 text-center mb-8 max-w-3xl mx-auto">
-            As a writer and literature enthusiast, these are some of the books that have shaped my perspective and inspired my own storytelling journey.
+            As an author and literature enthusiast, these are some of the books that have shaped my perspective and inspired my own storytelling journey.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -179,7 +179,7 @@ export default function AboutPage() {
               <li className="pl-10">
                 <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-brand-500 to-brand-600 absolute left-3 top-2" />
                 <h3 className="text-brand-900 font-semibold">Speaking and Workshops</h3>
-                <p className="text-sm text-brand-700">Helping writers find their voice and rhythm.</p>
+                <p className="text-sm text-brand-700">Helping authors find their voice and rhythm.</p>
               </li>
             </ul>
           </div>

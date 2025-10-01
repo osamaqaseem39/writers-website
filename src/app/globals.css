@@ -21,7 +21,6 @@
     overflow-x: hidden;
     opacity: 1;
     transition: opacity 0.1s ease-in-out;
-    height: 100%;
     margin: 0;
     padding: 0;
   }
@@ -75,7 +74,6 @@
 
   /* Ensure the main layout allows scrolling */
   .flex.flex-col {
-    min-height: 100vh;
     overflow: visible;
   }
 
@@ -107,19 +105,19 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #8b5cf6, #a855f7);
+    background: linear-gradient(180deg, #567C8D, #2F4156);
     border-radius: 4px;
     transition: background 0.3s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #7c3aed, #9333ea);
+    background: linear-gradient(180deg, #2F4156, #567C8D);
   }
 
   /* Firefox scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: #8b5cf6 #f1f1f1;
+    scrollbar-color: #567C8D #f1f1f1;
   }
 
   /* Custom scrollbar utilities for reviews */
@@ -137,17 +135,17 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #8b5cf6, #a855f7);
+    background: linear-gradient(180deg, #567C8D, #2F4156);
     border-radius: 3px;
     transition: background 0.3s ease;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #7c3aed, #9333ea);
+    background: linear-gradient(180deg, #2F4156, #567C8D);
   }
 
   .scrollbar-thumb-brand-400::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #8b5cf6, #a855f7);
+    background: linear-gradient(180deg, #567C8D, #2F4156);
   }
 
   .scrollbar-track-brand-100::-webkit-scrollbar-track {
@@ -159,11 +157,14 @@
   @media (max-width: 768px) {
     html {
       font-size: 16px;
+      height: auto;
     }
     
     body {
       font-size: 16px;
       line-height: 1.6;
+      height: auto;
+      min-height: auto;
     }
     
     h1, h2, h3, h4, h5, h6 {
@@ -171,16 +172,50 @@
       font-weight: 600;
       line-height: 1.3;
     }
+    
+    /* Mobile hero section improvements */
+    #home {
+      min-height: 100vh;
+      height: auto;
+    }
+    
+    /* Better mobile spacing */
+    .mobile-padding {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    /* Mobile button improvements */
+    .mobile-button {
+      min-height: 44px;
+      touch-action: manipulation;
+    }
+    
+    /* Fix mobile viewport issues */
+    .scale-screen {
+      min-height: auto;
+    }
+  }
+  
+  /* Ensure no extra space after footer */
+  footer {
+    margin-bottom: 0;
+  }
+  
+  /* Fix any potential extra space */
+  .scale-screen {
+    margin: 0;
+    padding: 0;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25;
+    @apply bg-gradient-to-r from-navy to-teal hover:from-teal hover:to-navy text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-navy/25;
   }
   
   .text-gradient {
-    @apply bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-navy via-teal to-navy bg-clip-text text-transparent;
   }
 }
 

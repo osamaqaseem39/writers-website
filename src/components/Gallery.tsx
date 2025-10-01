@@ -70,7 +70,7 @@ export function Gallery() {
             Behind the <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-600">Scenes</span>
           </h2>
           <p className="text-mobile-lg text-brand-800 max-w-3xl mx-auto font-jost">
-            <span className="hidden sm:inline">A glimpse into my world as a writer - from quiet moments of creation to exciting book events and everything in between.</span>
+                <span className="hidden sm:inline">A glimpse into my world as an author - from quiet moments of creation to exciting book events and everything in between.</span>
             <span className="sm:hidden">Behind the scenes of my writing journey.</span>
           </p>
           <div className="w-24 h-1 mx-auto rounded-full mt-6 bg-gradient-to-r from-brand-500 to-brand-600"></div>
