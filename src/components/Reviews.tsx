@@ -97,7 +97,7 @@ export function Reviews() {
         {/* Reviews Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {reviews.map((review) => (
-            <ReviewCard key={review.id} review={review} />
+            <ReviewCard key={(review as any)._id || `${review.name}-${review.rating}`} review={review} />
           ))}
         </div>
 
