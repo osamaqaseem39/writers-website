@@ -12,6 +12,7 @@ const blogRoutes = require('./routes/blog');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 const paymentRoutes = require('./routes/payments');
+const galleryRoutes = require('./routes/gallery');
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use('/api/blog', blogRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/gallery', galleryRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

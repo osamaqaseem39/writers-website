@@ -9,6 +9,8 @@ router.post('/', [
   body('name').notEmpty(),
   body('rating').isInt({ min: 1, max: 5 }),
   body('text').notEmpty(),
+  body('location').optional().isString(),
+  body('imageUrl').optional().isString(),
 ], reviewController.create);
 
 router.put('/:id', requireAuth, requireAdmin, reviewController.update);

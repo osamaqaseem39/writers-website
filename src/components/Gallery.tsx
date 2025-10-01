@@ -1,56 +1,38 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
+
+interface GalleryImage {
+	_id: string
+	title: string
+	description?: string
+	src: string
+	alt?: string
+	status: 'Draft' | 'Published'
+}
 
 export function Gallery() {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
   const { ref: galleryRef, isVisible: galleryVisible } = useScrollAnimation()
   const { ref: ctaRef, isVisible: ctaVisible } = useScrollAnimation()
 
-  const galleryImages = [
-    {
-      id: 1,
-      src: "/gallery1.jpeg",
-      alt: "Gallery image 1",
-      title: "Gallery Image 1",
-      description: "Behind the scenes moment"
-    },
-    {
-      id: 2,
-      src: "/gallery2.jpeg", 
-      alt: "Gallery image 2",
-      title: "Gallery Image 2",
-      description: "Behind the scenes moment"
-    },
-    {
-      id: 3,
-      src: "/gallery3.jpeg",
-      alt: "Gallery image 3",
-      title: "Gallery Image 3",
-      description: "Behind the scenes moment"
-    },
-    {
-      id: 4,
-      src: "/gallery4.jpeg",
-      alt: "Gallery image 4",
-      title: "Gallery Image 4",
-      description: "Behind the scenes moment"
-    },
-    {
-      id: 5,
-      src: "/gallery5.jpeg",
-      alt: "Gallery image 5",
-      title: "Gallery Image 5",
-      description: "Behind the scenes moment"
-    },
-    {
-      id: 6,
-      src: "/gallery6.jpeg",
-      alt: "Gallery image 6",
-      title: "Gallery Image 6",
-      description: "Behind the scenes moment"
-    },
-  ]
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
+
+  useEffect(() => {
+    let isMounted = true
+    const load = async () => {
+      try {
+        const res = await fetch('/api/gallery', { cache: 'no-store' })
+        const data = await res.json()
+        if (isMounted) setGalleryImages(data.images || [])
+      } catch {
+        if (isMounted) setGalleryImages([])
+      }
+    }
+    load()
+    return () => { isMounted = false }
+  }, [])
 
   return (
     <section id="gallery" className="py-20 bg-gradient-to-br from-brand-50 via-brand-100 to-brand-200 relative overflow-hidden">
@@ -82,13 +64,13 @@ export function Gallery() {
           className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate ${galleryVisible ? 'animate-in' : ''}`}
         >
           {galleryImages.map((image) => (
-            <div key={image.id} className="group">
+            <div key={image._id} className="group">
               <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white/80 backdrop-blur-sm border border-brand-200/50">
                 {/* Image */}
                 <div className="aspect-square overflow-hidden">
                   <img 
                     src={image.src} 
-                    alt={image.alt}
+                    alt={image.alt || image.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                 </div>

@@ -1,65 +1,37 @@
 'use client'
 
+import { useEffect, useMemo, useState } from 'react'
 import { PageShell } from '@/components/PageShell'
 
 interface BlogPost {
-  id: number
+  _id: string
   title: string
-  excerpt: string
-  category: string
-  date: string
-  readTime: string
-  image: string
-  featured?: boolean
+  content: string
+  category?: string
+  imageUrl?: string
+  published: boolean
+  createdAt: string
 }
 
 export default function BlogPage() {
-  const blogPosts: BlogPost[] = [
-    {
-      id: 1,
-      title: 'The Art of Storytelling in the Digital Age',
-      excerpt:
-        "Exploring how traditional storytelling techniques adapt and evolve in our modern, technology-driven world.",
-      category: 'Writing Tips',
-      date: 'Dec 15, 2024',
-      readTime: '5 min read',
-      image: '✍️',
-      featured: true,
-    },
-    {
-      id: 2,
-      title: 'Finding Inspiration in Everyday Moments',
-      excerpt:
-        "Discover how the mundane can become extraordinary when viewed through an author's lens.",
-      category: 'Inspiration',
-      date: 'Dec 10, 2024',
-      readTime: '4 min read',
-      image: '💡',
-    },
-    {
-      id: 3,
-      title: 'Building Complex Characters Readers Love',
-      excerpt:
-        'Techniques for creating memorable characters that resonate with your audience.',
-      category: 'Character Development',
-      date: 'Dec 5, 2024',
-      readTime: '7 min read',
-      image: '👥',
-    },
-    {
-      id: 4,
-      title: 'The Power of Setting in Fiction',
-      excerpt:
-        'How the right setting can transform your story and immerse readers in your world.',
-      category: 'World Building',
-      date: 'Nov 28, 2024',
-      readTime: '6 min read',
-      image: '🌍',
-    },
-  ]
+  const [posts, setPosts] = useState<BlogPost[]>([])
+  useEffect(() => {
+    let isMounted = true
+    const load = async () => {
+      try {
+        const res = await fetch('/api/blog', { cache: 'no-store' })
+        const data = await res.json()
+        if (isMounted) setPosts((data.posts || []).filter((p: BlogPost) => p.published))
+      } catch {
+        if (isMounted) setPosts([])
+      }
+    }
+    load()
+    return () => { isMounted = false }
+  }, [])
 
-  const featured = blogPosts.find((p) => p.featured)
-  const others = blogPosts.filter((p) => !p.featured)
+  const featured = useMemo(() => posts[0], [posts])
+  const others = useMemo(() => posts.slice(1), [posts])
 
   return (
     <PageShell>
@@ -95,12 +67,16 @@ export default function BlogPage() {
             <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl transition-all duration-300 group-hover:bg-white/90 group-hover:scale-[1.02]">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="text-center lg:text-left">
-                  <div className="w-32 h-32 rounded-2xl mx-auto lg:mx-0 flex items-center justify-center text-6xl mb-6 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-brand-500 to-brand-600">
-                    {featured.image}
+                  <div className="w-32 h-32 rounded-2xl mx-auto lg:mx-0 flex items-center justify-center text-6xl mb-6 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-brand-500 to-brand-600 overflow-hidden">
+                    {featured.imageUrl ? (
+                      <img src={featured.imageUrl} alt={featured.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-white">✍️</span>
+                    )}
                   </div>
                   <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-4">
                     <span className="text-xs text-brand-600 bg-brand-100 px-3 py-1 rounded-full">Featured</span>
-                    <span className="text-xs text-white px-3 py-1 rounded-full bg-brand-500">{featured.category}</span>
+                    <span className="text-xs text-white px-3 py-1 rounded-full bg-brand-500">{featured.category || 'General'}</span>
                   </div>
                 </div>
 
@@ -108,10 +84,10 @@ export default function BlogPage() {
                   <h2 className="text-3xl font-bold text-brand-900 mb-4 group-hover:text-brand-700 transition-colors duration-300">
                     {featured.title}
                   </h2>
-                  <p className="text-brand-800 text-lg leading-relaxed mb-6">{featured.excerpt}</p>
+                  <p className="text-brand-800 text-lg leading-relaxed mb-6">{featured.content.slice(0, 160)}...</p>
                   <div className="flex items-center justify-between text-sm text-brand-600 mb-6">
-                    <span>{featured.date}</span>
-                    <span>{featured.readTime}</span>
+                    <span>{new Date(featured.createdAt).toDateString()}</span>
+                    <span>{Math.max(1, Math.round((featured.content.length || 0) / 800))} min read</span>
                   </div>
                   <a
                     href="#"
@@ -128,22 +104,26 @@ export default function BlogPage() {
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
         {others.map((post) => (
-          <div key={post.id} className="group">
+          <div key={post._id} className="group">
             <div className="bg-white/70 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-6 shadow-lg transition-all duration-300 group-hover:bg-white/80 group-hover:scale-105 group-hover:shadow-2xl h-full">
               <div className="text-center mb-6">
-                <div className="w-20 h-20 rounded-xl mx-auto flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-brand-500 to-brand-600">
-                  {post.image}
+                <div className="w-20 h-20 rounded-xl mx-auto flex items-center justify-center text-4xl mb-4 group-hover:scale-110 transition-transform duration-300 bg-gradient-to-r from-brand-500 to-brand-600 overflow-hidden">
+                  {post.imageUrl ? (
+                    <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-white">✍️</span>
+                  )}
                 </div>
-                <span className="text-xs text-white px-3 py-1 rounded-full bg-brand-500">{post.category}</span>
+                <span className="text-xs text-white px-3 py-1 rounded-full bg-brand-500">{post.category || 'General'}</span>
               </div>
               <div className="text-center">
                 <h3 className="text-xl font-bold text-brand-900 mb-3 group-hover:text-brand-700 transition-colors duration-300">
                   {post.title}
                 </h3>
-                <p className="text-brand-800 text-sm leading-relaxed mb-4">{post.excerpt}</p>
+                <p className="text-brand-800 text-sm leading-relaxed mb-4">{post.content.slice(0, 120)}...</p>
                 <div className="flex items-center justify-between text-sm text-brand-600 mb-4">
-                  <span>{post.date}</span>
-                  <span>{post.readTime}</span>
+                  <span>{new Date(post.createdAt).toDateString()}</span>
+                  <span>{Math.max(1, Math.round((post.content.length || 0) / 800))} min read</span>
                 </div>
               </div>
               <div className="text-center">

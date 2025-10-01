@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
 export interface CartItem {
-  id: number
+  id: string
   title: string
   author: string
   price: number
@@ -15,12 +15,12 @@ export interface CartItem {
 interface CartContextType {
   cartItems: CartItem[]
   addToCart: (item: Omit<CartItem, 'quantity'>) => void
-  removeFromCart: (id: number) => void
-  updateQuantity: (id: number, quantity: number) => void
+  removeFromCart: (id: string) => void
+  updateQuantity: (id: string, quantity: number) => void
   clearCart: () => void
   getTotalPrice: () => number
   getTotalItems: () => number
-  isInCart: (id: number) => boolean
+  isInCart: (id: string) => boolean
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
@@ -63,11 +63,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     })
   }
 
-  const removeFromCart = (id: number) => {
+  const removeFromCart = (id: string) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== id))
   }
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = (id: string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(id)
       return
@@ -92,7 +92,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return cartItems.reduce((total, item) => total + item.quantity, 0)
   }
 
-  const isInCart = (id: number) => {
+  const isInCart = (id: string) => {
     return cartItems.some(item => item.id === id)
   }
 

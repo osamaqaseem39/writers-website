@@ -1,16 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000'
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
+  
   try {
-    const { id } = await params
+    // Fetch book from backend API
+    const response = await fetch(`${BACKEND_URL}/api/books/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Backend API responded with status: ${response.status}`)
+    }
+
+    const data = await response.json()
+    return NextResponse.json(data)
+  } catch (error) {
+    console.error('Error fetching book from backend:', error)
     
-    // For now, return mock data since we don't have a database connection
-    // In a real app, you would fetch from your backend API here
+    // Fallback to mock data if backend is not available
     const mockBook = {
-      id: id,
+      _id: id,
       title: "You Never Cried",
       author: "Nawa Sohail",
       description: "Pace Town is a place of quiet nights, rustling leaves, and stories waiting to be told. Dan, a gentle bookseller and devoted father, has long kept his heart closed. When Rose arrives, carrying secrets of her own, everything begins to change. Together, they find comfort in starlit walks, whispered conversations, and the fragile beauty of second chances.",
@@ -34,15 +52,6 @@ export async function GET(
       reviews: 6
     }
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-
     return NextResponse.json({ book: mockBook })
-  } catch (error) {
-    console.error('Error fetching book:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch book' },
-      { status: 500 }
-    )
   }
 }

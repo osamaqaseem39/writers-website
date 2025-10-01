@@ -77,22 +77,30 @@ export default function DashboardPage() {
       views: 0
     }
   ])
-  const [galleryImages, setGalleryImages] = useState([
-    {
-      id: 1,
-      src: "/gallery1.jpeg",
-      title: "Gallery Image 1",
-      description: "Behind the scenes moment",
-      status: "Published"
-    },
-    {
-      id: 2,
-      src: "/gallery2.jpeg",
-      title: "Gallery Image 2", 
-      description: "Behind the scenes moment",
-      status: "Draft"
+  const [galleryImages, setGalleryImages] = useState<any[]>([])
+  const [isGalleryLoading, setIsGalleryLoading] = useState(false)
+  const [newImage, setNewImage] = useState({ title: '', description: '', src: '', status: 'Published' })
+  const [uploadFile, setUploadFile] = useState<File | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
+
+  useEffect(() => {
+    const loadGallery = async () => {
+      setIsGalleryLoading(true)
+      try {
+        const token = localStorage.getItem('token')
+        const res = await fetch('/api/gallery/admin', {
+          headers: token ? { Authorization: `Bearer ${token}` } as any : undefined
+        })
+        const data = await res.json()
+        setGalleryImages(data.images || [])
+      } catch {
+        setGalleryImages([])
+      } finally {
+        setIsGalleryLoading(false)
+      }
     }
-  ])
+    if (activeTab === 'gallery') loadGallery()
+  }, [activeTab])
 
   const tabs: DashboardTab[] = [
     { id: 'overview', name: 'Overview', icon: '📊' },
@@ -231,7 +239,52 @@ export default function DashboardPage() {
             <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Books Management</h3>
-                <button className="bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors">
+                <button
+                  onClick={async () => {
+                    const token = localStorage.getItem('token')
+                    // demo create using external upload if file chosen via prompt
+                    const title = prompt('Book title') || ''
+                    const author = prompt('Author') || ''
+                    const priceStr = prompt('Price') || '0'
+                    const filePick = confirm('Upload cover image from your computer? Click Cancel to paste a URL')
+                    let coverImageUrl = ''
+                    if (filePick) {
+                      const input = document.createElement('input')
+                      input.type = 'file'
+                      input.accept = 'image/*'
+                      const file = await new Promise<File | null>((resolve) => {
+                        input.onchange = () => resolve(input.files?.[0] || null)
+                        input.click()
+                      })
+                      if (file) {
+                        const fd = new FormData()
+                        fd.append('file', file)
+                        const up = await fetch('https://ns.osamaqaseem.online/upload.php', { method: 'POST', body: fd })
+                        const upJson = await up.json()
+                        if (up.ok && upJson?.url) coverImageUrl = upJson.url
+                      }
+                    } else {
+                      coverImageUrl = prompt('Paste image URL (optional)') || ''
+                    }
+                    const price = parseFloat(priceStr) || 0
+                    if (!title || !author || !price) return
+                    const res = await fetch('/api/books/admin', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {})
+                      },
+                      body: JSON.stringify({ title, author, price, coverImageUrl })
+                    })
+                    const data = await res.json()
+                    if (res.ok && data.book) {
+                      setBooks((prev) => [
+                        { id: data.book._id, title: data.book.title, author: data.book.author, price: data.book.price, status: data.book.status || 'Published', sales: 0, revenue: 0, coverImage: data.book.coverImageUrl || '/bookhomepage.jpeg' },
+                        ...prev
+                      ])
+                    }
+                  }}
+                  className="bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors">
                   Add New Book
                 </button>
               </div>
@@ -331,7 +384,50 @@ export default function DashboardPage() {
             <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Blog Management</h3>
-                <button className="bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors">
+                <button
+                  onClick={async () => {
+                    const token = localStorage.getItem('token')
+                    const title = prompt('Post title') || ''
+                    const content = prompt('Content') || ''
+                    const category = prompt('Category (optional)') || ''
+                    const filePick = confirm('Upload featured image from your computer? Click Cancel to paste a URL')
+                    let imageUrl = ''
+                    if (filePick) {
+                      const input = document.createElement('input')
+                      input.type = 'file'
+                      input.accept = 'image/*'
+                      const file = await new Promise<File | null>((resolve) => {
+                        input.onchange = () => resolve(input.files?.[0] || null)
+                        input.click()
+                      })
+                      if (file) {
+                        const fd = new FormData()
+                        fd.append('file', file)
+                        const up = await fetch('https://ns.osamaqaseem.online/upload.php', { method: 'POST', body: fd })
+                        const upJson = await up.json()
+                        if (up.ok && upJson?.url) imageUrl = upJson.url
+                      }
+                    } else {
+                      imageUrl = prompt('Paste image URL (optional)') || ''
+                    }
+                    if (!title || !content) return
+                    const res = await fetch('/api/blog/admin', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {})
+                      },
+                      body: JSON.stringify({ title, content, category, imageUrl, published: true })
+                    })
+                    const data = await res.json()
+                    if (res.ok && data.post) {
+                      setBlogPosts((prev) => [
+                        { id: data.post._id, title: data.post.title, category: data.post.category || 'General', date: new Date(data.post.createdAt).toDateString(), status: data.post.published ? 'Published' : 'Draft', views: 0 },
+                        ...prev
+                      ])
+                    }
+                  }}
+                  className="bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors">
                   New Post
                 </button>
               </div>
@@ -372,13 +468,93 @@ export default function DashboardPage() {
             <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Gallery Management</h3>
-                <button className="bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors">
-                  Upload Image
+                <button
+                  onClick={async () => {
+                    const token = localStorage.getItem('token')
+                    if (!newImage.title || (!newImage.src && !uploadFile)) return
+
+                    // If a file is provided, upload it to the external uploader first
+                    let finalSrc = newImage.src
+                    if (uploadFile) {
+                      try {
+                        setIsUploading(true)
+                        const formData = new FormData()
+                        formData.append('file', uploadFile)
+                        const uploadResp = await fetch('https://ns.osamaqaseem.online/upload.php', {
+                          method: 'POST',
+                          body: formData
+                        })
+                        const uploadJson = await uploadResp.json()
+                        if (!uploadResp.ok || !uploadJson?.url) {
+                          setIsUploading(false)
+                          return
+                        }
+                        finalSrc = uploadJson.url
+                      } catch {
+                        setIsUploading(false)
+                        return
+                      } finally {
+                        setIsUploading(false)
+                      }
+                    }
+
+                    const res = await fetch('/api/gallery/admin', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {})
+                      },
+                      body: JSON.stringify({ ...newImage, src: finalSrc })
+                    })
+                    const data = await res.json()
+                    if (res.ok && data.image) {
+                      setGalleryImages((prev) => [data.image, ...prev])
+                      setNewImage({ title: '', description: '', src: '', status: 'Published' })
+                      setUploadFile(null)
+                    }
+                  }}
+                  className="bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors">
+                  {isUploading ? 'Uploading...' : 'Upload Image'}
                 </button>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <input
+                  value={newImage.title}
+                  onChange={(e) => setNewImage({ ...newImage, title: e.target.value })}
+                  placeholder="Title"
+                  className="border border-brand-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  value={newImage.src}
+                  onChange={(e) => setNewImage({ ...newImage, src: e.target.value })}
+                  placeholder="Image URL"
+                  className="border border-brand-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                  className="border border-brand-200 rounded-lg px-3 py-2"
+                />
+                <input
+                  value={newImage.description}
+                  onChange={(e) => setNewImage({ ...newImage, description: e.target.value })}
+                  placeholder="Description"
+                  className="border border-brand-200 rounded-lg px-3 py-2"
+                />
+                <select
+                  value={newImage.status}
+                  onChange={(e) => setNewImage({ ...newImage, status: e.target.value })}
+                  className="border border-brand-200 rounded-lg px-3 py-2"
+                >
+                  <option value="Published">Published</option>
+                  <option value="Draft">Draft</option>
+                </select>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {galleryImages.map((image) => (
-                  <div key={image.id} className="border border-brand-200 rounded-lg overflow-hidden">
+                {isGalleryLoading && <div className="text-brand-600">Loading...</div>}
+                {!isGalleryLoading && galleryImages.map((image) => (
+                  <div key={image._id} className="border border-brand-200 rounded-lg overflow-hidden">
                     <img src={image.src} alt={image.title} className="w-full h-48 object-cover" />
                     <div className="p-4">
                       <h4 className="font-medium text-brand-900 mb-2">{image.title}</h4>
