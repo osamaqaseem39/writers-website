@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const token = localStorage.getItem('token')
         if (token) {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/auth/me`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'}/api/auth/me`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           if (res.ok) {
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true)
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/auth/login`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (name: string, email: string, password: string): Promise<{ success: boolean; message?: string }> => {
     setIsLoading(true)
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/auth/register`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const autoRegister = async (email: string, firstName: string, lastName: string, phone: string): Promise<{ success: boolean; isNewUser?: boolean; message?: string }> => {
     setIsLoading(true)
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/auth/auto-register`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'}/api/auth/auto-register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, firstName, lastName, phone })
