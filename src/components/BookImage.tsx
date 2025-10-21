@@ -1,0 +1,40 @@
+interface Book {
+  _id: string
+  title: string
+  author: string
+  genre?: string
+  description: string
+  fullDescription?: string
+  year?: string
+  pages?: number
+  status: string
+  isbn?: string
+  language?: string
+  readingTime?: string
+  publisher?: string
+  publishDate?: string
+  price: number
+  coverImageUrl: string
+  rating?: number
+  reviews?: number
+}
+
+interface BookImageProps {
+  book: Book
+}
+
+export function BookImage({ book }: BookImageProps) {
+  return (
+    <div className="flex justify-center">
+      <div className="relative group">
+        <div className="absolute -inset-6 bg-gradient-to-br from-brand-200 via-brand-300 to-brand-400 rounded-3xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+        <div className="absolute -inset-3 bg-white rounded-2xl shadow-xl"></div>
+        <img 
+          src={book.coverImageUrl} 
+          alt={book.title}
+          className="relative w-96 h-[28rem] object-cover rounded-2xl shadow-2xl group-hover:scale-105 transition-transform duration-500"
+        />
+      </div>
+    </div>
+  )
+}

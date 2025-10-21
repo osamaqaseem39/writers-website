@@ -1,0 +1,569 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@100;200;300;400;500;600;700;800;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  html {
+    font-family: 'Jost', 'Poppins', system-ui, sans-serif;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    visibility: visible;
+    height: 100%;
+  }
+  
+  body {
+    @apply bg-white text-gray-900 font-jost;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+    overflow-x: hidden;
+    opacity: 1;
+    transition: opacity 0.1s ease-in-out;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Screen scaling for better responsiveness */
+  @media (min-width: 1920px) {
+    html {
+      font-size: 18px;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    html {
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  /* Smooth scroll utilities */
+  .smooth-scroll {
+    scroll-behavior: smooth;
+  }
+
+  /* Prevent smooth scroll on specific elements */
+  .no-smooth-scroll {
+    scroll-behavior: auto;
+  }
+
+
+  /* Ensure all sections are visible */
+  section {
+    height: auto;
+    min-height: auto;
+  }
+
+  /* Fix for Hero section specifically */
+  #home {
+    height: 100vh;
+  }
+
+  /* Ensure footer is always visible */
+  footer {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Ensure the main layout allows scrolling */
+  .flex.flex-col {
+    overflow: visible;
+  }
+
+  /* Ensure only body scrolls */
+  html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Prevent nested scroll containers */
+  main, section, div {
+    overflow: visible;
+  }
+
+
+  /* Simple smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #567C8D, #2F4156);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #2F4156, #567C8D);
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #567C8D #f1f1f1;
+  }
+
+  /* Custom scrollbar utilities for reviews */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #567C8D, #2F4156);
+    border-radius: 3px;
+    transition: background 0.3s ease;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #2F4156, #567C8D);
+  }
+
+  .scrollbar-thumb-brand-400::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #567C8D, #2F4156);
+  }
+
+  .scrollbar-track-brand-100::-webkit-scrollbar-track {
+    background: #f3f4f6;
+  }
+
+
+  /* Mobile font optimizations */
+  @media (max-width: 768px) {
+    html {
+      font-size: 16px;
+      height: auto;
+    }
+    
+    body {
+      font-size: 16px;
+      line-height: 1.6;
+      height: auto;
+      min-height: auto;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Jost', 'Poppins', system-ui, sans-serif;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+    
+    /* Mobile hero section improvements */
+    #home {
+      min-height: 100vh;
+      height: auto;
+    }
+    
+    /* Better mobile spacing */
+    .mobile-padding {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    /* Mobile button improvements */
+    .mobile-button {
+      min-height: 44px;
+      touch-action: manipulation;
+    }
+    
+    /* Fix mobile viewport issues */
+    .scale-screen {
+      min-height: auto;
+    }
+  }
+  
+  /* Ensure no extra space after footer */
+  footer {
+    margin-bottom: 0;
+  }
+  
+  /* Fix any potential extra space */
+  .scale-screen {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-navy to-teal hover:from-teal hover:to-navy text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-navy/25;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-navy via-teal to-navy bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+  
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+  
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  /* Font utilities */
+  .font-jost {
+    font-family: 'Jost', 'Poppins', system-ui, sans-serif;
+  }
+  
+  .font-poppins {
+    font-family: 'Poppins', system-ui, sans-serif;
+  }
+
+  /* Mobile text sizing */
+  .text-mobile-sm {
+    @apply text-sm sm:text-base;
+  }
+  
+  .text-mobile-base {
+    @apply text-base sm:text-lg;
+  }
+  
+  .text-mobile-lg {
+    @apply text-lg sm:text-xl;
+  }
+  
+  .text-mobile-xl {
+    @apply text-xl sm:text-2xl;
+  }
+  
+  .text-mobile-2xl {
+    @apply text-2xl sm:text-3xl;
+  }
+  
+  .text-mobile-3xl {
+    @apply text-3xl sm:text-4xl;
+  }
+  
+  .text-mobile-4xl {
+    @apply text-4xl sm:text-5xl;
+  }
+  
+  .text-mobile-5xl {
+    @apply text-5xl sm:text-6xl;
+  }
+}
+
+/* Mobile header fixes */
+@media (max-width: 1024px) {
+  header {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  
+  header.bg-white {
+    background-color: #ffffff !important;
+  }
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+/* Hero animations */
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes typewriterName {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes slideFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-float-up {
+  animation: floatUp 1s ease-out;
+}
+
+.animate-typewriter {
+  animation: typewriter 2s steps(4, end) 0.5s both;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #000;
+}
+
+.animate-typewriter-name {
+  animation: typewriterName 3s steps(12, end) 2.5s both;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #000;
+}
+
+.animate-slide-from-right {
+  animation: slideFromRight 1s ease-out 1.5s both;
+}
+
+.animate-slide-from-left {
+  animation: slideFromLeft 1s ease-out 2s both;
+}
+
+/* Custom Hero Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out 0.8s both;
+}
+
+  /* Screen scaling utilities */
+  .scale-screen {
+    transform: scale(1);
+    transition: transform 0.3s ease;
+    transform-origin: top center;
+  }
+
+  @media (min-width: 1920px) {
+    .scale-screen {
+      transform: scale(1.05);
+    }
+  }
+
+  @media (min-width: 2560px) {
+    .scale-screen {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .scale-screen {
+      transform: scale(0.98);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .scale-screen {
+      transform: scale(0.95);
+    }
+  }
+
+  /* Scroll-triggered animations */
+  .scroll-animate {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scroll-animate.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scroll-animate-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scroll-animate-left.animate-in {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-animate-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scroll-animate-right.animate-in {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .scroll-animate-scale {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .scroll-animate-scale.animate-in {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .scroll-animate-fade {
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+  }
+
+  .scroll-animate-fade.animate-in {
+    opacity: 1;
+  }
+
+  /* Staggered animations */
+  .scroll-animate-delay-100 {
+    transition-delay: 0.1s;
+  }
+
+  .scroll-animate-delay-200 {
+    transition-delay: 0.2s;
+  }
+
+  .scroll-animate-delay-300 {
+    transition-delay: 0.3s;
+  }
+
+  .scroll-animate-delay-400 {
+    transition-delay: 0.4s;
+  }
+
+  .scroll-animate-delay-500 {
+    transition-delay: 0.5s;
+  }

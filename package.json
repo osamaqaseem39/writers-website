@@ -1,0 +1,33 @@
+{
+  "name": "nawa-sohail-writer",
+  "version": "1.0.0",
+  "description": "Official website for writer Nawa Sohail",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  
+  "keywords": [
+    "writer",
+    "author",
+    "books",
+    "literature"
+  ],
+  "author": "Nawa Sohail",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "autoprefixer": "^10.4.21",
+    "next": "^15.4.7",
+    "postcss": "^8.5.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.9.2"
+  }
+}
