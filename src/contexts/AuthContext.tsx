@@ -27,16 +27,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const init = async () => {
       try {
-        const token = localStorage.getItem('token')
-        if (token) {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'}/api/auth/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          if (res.ok) {
-            const data = await res.json()
-            setUser(data.user)
-          } else {
-            localStorage.removeItem('token')
+        // Check if we're on the client side
+        if (typeof window !== 'undefined') {
+          const token = localStorage.getItem('token')
+          if (token) {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'}/api/auth/me`, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            if (res.ok) {
+              const data = await res.json()
+              setUser(data.user)
+            } else {
+              localStorage.removeItem('token')
+            }
           }
         }
       } catch (e) {
@@ -61,7 +64,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return false
       }
       const data = await res.json()
-      localStorage.setItem('token', data.token)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', data.token)
+      }
       setUser(data.user)
       setIsLoading(false)
       return true
@@ -84,7 +89,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoading(false)
         return { success: false, message: data?.message || data?.errors?.[0]?.msg || 'Registration failed' }
       }
-      localStorage.setItem('token', data.token)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', data.token)
+      }
       setUser(data.user)
       setIsLoading(false)
       return { success: true }
@@ -113,7 +120,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       
       const data = await res.json()
-      localStorage.setItem('token', data.token)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', data.token)
+      }
       setUser(data.user)
       setIsLoading(false)
       
@@ -133,7 +142,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null)
-    localStorage.removeItem('token')
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token')
+    }
   }
 
   return (

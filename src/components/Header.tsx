@@ -7,6 +7,13 @@ import { useCart } from '@/contexts/CartContext'
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isClient, setIsClient] = useState(false)
+  
+  // Ensure we're on the client side before using context
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+  
   const { getTotalItems } = useCart()
 
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -86,7 +93,7 @@ export function Header() {
                 <path d="M8.25 21a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm11.25 0a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
               </svg>
               <span>Cart</span>
-              {getTotalItems() > 0 && (
+              {isClient && getTotalItems() > 0 && (
                 <span className="absolute -top-2 -right-2 bg-teal text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
                   {getTotalItems()}
                 </span>

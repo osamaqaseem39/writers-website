@@ -22,6 +22,12 @@ export function useScrollAnimation(options: UseScrollAnimationOptions = {}) {
     const element = ref.current
     if (!element) return
 
+    // Check if IntersectionObserver is available (client-side only)
+    if (typeof window === 'undefined' || !window.IntersectionObserver) {
+      setIsVisible(true)
+      return
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
