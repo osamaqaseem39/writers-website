@@ -34,10 +34,8 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!isLoading && !user) {
       router.replace('/login')
-    } else if (!isLoading && user && user.role !== 'admin') {
-      // Redirect customers to home page or a customer dashboard
-      router.replace('/')
     }
+    // Remove the redirect for customers - let them access the dashboard
   }, [user, isLoading, router])
 
   if (isLoading || !user) {
@@ -67,7 +65,7 @@ export default function DashboardPage() {
     if (activeTab === 'gallery') loadGallery()
   }, [activeTab])
 
-  const tabs: DashboardTab[] = [
+  const adminTabs: DashboardTab[] = [
     { id: 'overview', name: 'Overview', icon: '📊' },
     { id: 'books', name: 'Books', icon: '📚' },
     { id: 'reviews', name: 'Reviews', icon: '⭐' },
@@ -75,6 +73,15 @@ export default function DashboardPage() {
     { id: 'gallery', name: 'Gallery', icon: '🖼️' },
     { id: 'orders', name: 'Orders', icon: '🛒' }
   ]
+
+  const customerTabs: DashboardTab[] = [
+    { id: 'overview', name: 'Overview', icon: '📊' },
+    { id: 'orders', name: 'My Orders', icon: '🛒' },
+    { id: 'profile', name: 'Profile', icon: '👤' },
+    { id: 'wishlist', name: 'Wishlist', icon: '❤️' }
+  ]
+
+  const tabs = user.role === 'admin' ? adminTabs : customerTabs
 
   useEffect(() => {
     // Load initial data for books, reviews, blog
@@ -284,8 +291,15 @@ export default function DashboardPage() {
       <main className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
-            <h1 className="text-4xl font-serif text-brand-900 mb-4">Dashboard</h1>
-            <p className="text-lg text-brand-700">Manage your content and ecommerce</p>
+            <h1 className="text-4xl font-serif text-brand-900 mb-4">
+              {user.role === 'admin' ? 'Admin Dashboard' : 'My Dashboard'}
+            </h1>
+            <p className="text-lg text-brand-700">
+              {user.role === 'admin' 
+                ? 'Manage your content and ecommerce' 
+                : 'Welcome back! View your orders and account information'
+              }
+            </p>
           </div>
 
           {/* Tabs */}
@@ -313,62 +327,172 @@ export default function DashboardPage() {
             <div className="space-y-8">
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white border border-brand-200 rounded-2xl p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-brand-600">Total Revenue</p>
-                      <p className="text-2xl font-bold text-brand-900">${totalRevenue.toFixed(2)}</p>
+                {user.role === 'admin' ? (
+                  <>
+                    <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-brand-600">Total Revenue</p>
+                          <p className="text-2xl font-bold text-brand-900">${totalRevenue.toFixed(2)}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">💰</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">💰</span>
+                    <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-brand-600">Total Sales</p>
+                          <p className="text-2xl font-bold text-brand-900">{totalSales}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">📚</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="bg-white border border-brand-200 rounded-2xl p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-brand-600">Total Sales</p>
-                      <p className="text-2xl font-bold text-brand-900">{totalSales}</p>
+                    <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-brand-600">Pending Reviews</p>
+                          <p className="text-2xl font-bold text-brand-900">{pendingReviews}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">⭐</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">📚</span>
+                    <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-brand-600">Draft Posts</p>
+                          <p className="text-2xl font-bold text-brand-900">{draftPosts}</p>
+                        </div>
+                        <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">✍️</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="bg-white border border-brand-200 rounded-2xl p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-brand-600">Pending Reviews</p>
-                      <p className="text-2xl font-bold text-brand-900">{pendingReviews}</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-brand-600">Total Orders</p>
+                          <p className="text-2xl font-bold text-brand-900">0</p>
+                        </div>
+                        <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">🛒</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">⭐</span>
+                    <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-brand-600">Books Purchased</p>
+                          <p className="text-2xl font-bold text-brand-900">0</p>
+                        </div>
+                        <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">📚</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="bg-white border border-brand-200 rounded-2xl p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-brand-600">Draft Posts</p>
-                      <p className="text-2xl font-bold text-brand-900">{draftPosts}</p>
+                    <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-brand-600">Wishlist Items</p>
+                          <p className="text-2xl font-bold text-brand-900">0</p>
+                        </div>
+                        <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">❤️</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
-                      <span className="text-2xl">✍️</span>
+                    <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm text-brand-600">Reviews Written</p>
+                          <p className="text-2xl font-bold text-brand-900">0</p>
+                        </div>
+                        <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
+                          <span className="text-2xl">⭐</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </>
+                )}
               </div>
 
               {/* Recent Activity */}
               <div className="bg-white border border-brand-200 rounded-2xl p-8">
                 <h3 className="text-xl font-serif text-brand-900 mb-6">Recent Activity</h3>
-                <div className="text-brand-600">No recent activity.</div>
+                <div className="text-brand-600">
+                  {user.role === 'admin' 
+                    ? 'No recent activity.' 
+                    : 'Welcome! Start by browsing our books or creating an account.'
+                  }
+                </div>
               </div>
             </div>
           )}
 
-          {/* Books Tab */}
-          {activeTab === 'books' && (
+          {/* Customer Profile Tab */}
+          {activeTab === 'profile' && user.role !== 'admin' && (
+            <div className="bg-white border border-brand-200 rounded-2xl p-8">
+              <h3 className="text-xl font-serif text-brand-900 mb-6">Profile Information</h3>
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-brand-700 mb-2">Name</label>
+                    <input 
+                      type="text" 
+                      value={user.name} 
+                      className="w-full border border-brand-200 rounded-lg px-3 py-2 bg-gray-50" 
+                      readOnly 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-brand-700 mb-2">Email</label>
+                    <input 
+                      type="email" 
+                      value={user.email} 
+                      className="w-full border border-brand-200 rounded-lg px-3 py-2 bg-gray-50" 
+                      readOnly 
+                    />
+                  </div>
+                </div>
+                <div className="pt-4">
+                  <button className="bg-brand-500 text-white px-6 py-2 rounded-lg hover:bg-brand-600 transition-colors">
+                    Edit Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Customer Wishlist Tab */}
+          {activeTab === 'wishlist' && user.role !== 'admin' && (
+            <div className="bg-white border border-brand-200 rounded-2xl p-8">
+              <h3 className="text-xl font-serif text-brand-900 mb-6">My Wishlist</h3>
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">❤️</span>
+                </div>
+                <h4 className="text-lg font-medium text-brand-900 mb-2">Your wishlist is empty</h4>
+                <p className="text-brand-600 mb-6">Add books to your wishlist to save them for later</p>
+                <a 
+                  href="/books" 
+                  className="bg-brand-500 text-white px-6 py-3 rounded-lg hover:bg-brand-600 transition-colors inline-block"
+                >
+                  Browse Books
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* Books Tab - Admin Only */}
+          {activeTab === 'books' && user.role === 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Books Management</h3>
@@ -472,8 +596,8 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Reviews Tab */}
-          {activeTab === 'reviews' && (
+          {/* Reviews Tab - Admin Only */}
+          {activeTab === 'reviews' && user.role === 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <h3 className="text-xl font-serif text-brand-900 mb-6">Reviews Management</h3>
               <div className="space-y-4">
@@ -524,8 +648,8 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Blog Tab */}
-          {activeTab === 'blog' && (
+          {/* Blog Tab - Admin Only */}
+          {activeTab === 'blog' && user.role === 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Blog Management</h3>
@@ -610,8 +734,8 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Gallery Tab */}
-          {activeTab === 'gallery' && (
+          {/* Gallery Tab - Admin Only */}
+          {activeTab === 'gallery' && user.role === 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Gallery Management</h3>
@@ -731,13 +855,32 @@ export default function DashboardPage() {
           {/* Orders Tab */}
           {activeTab === 'orders' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
-              <h3 className="text-xl font-serif text-brand-900 mb-6">Orders Management</h3>
+              <h3 className="text-xl font-serif text-brand-900 mb-6">
+                {user.role === 'admin' ? 'Orders Management' : 'My Orders'}
+              </h3>
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🛒</span>
                 </div>
-                <h4 className="text-lg font-medium text-brand-900 mb-2">No orders yet</h4>
-                <p className="text-brand-600">Orders will appear here when customers make purchases</p>
+                <h4 className="text-lg font-medium text-brand-900 mb-2">
+                  {user.role === 'admin' ? 'No orders yet' : 'You have no orders yet'}
+                </h4>
+                <p className="text-brand-600">
+                  {user.role === 'admin' 
+                    ? 'Orders will appear here when customers make purchases' 
+                    : 'Start shopping to see your orders here'
+                  }
+                </p>
+                {user.role !== 'admin' && (
+                  <div className="mt-6">
+                    <a 
+                      href="/books" 
+                      className="bg-brand-500 text-white px-6 py-3 rounded-lg hover:bg-brand-600 transition-colors inline-block"
+                    >
+                      Browse Books
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           )}
