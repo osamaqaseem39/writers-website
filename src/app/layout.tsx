@@ -3,6 +3,7 @@ import './globals.css'
 import { Footer } from '@/components/Footer'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { CartProvider } from '@/contexts/CartContext'
+import { WishlistProvider } from '@/contexts/WishlistContext'
 
 export const metadata: Metadata = {
   title: 'Nawa Sohail - Author',
@@ -41,12 +42,14 @@ export default function RootLayout({
       <body className="antialiased font-jost">
         <AuthProvider>
           <CartProvider>
-            <div className="flex flex-col scale-screen">
-              <main className="flex-1">
-                {children}
-              </main>
-              <Footer />
-            </div>
+            <WishlistProvider>
+              <div className="flex flex-col scale-screen">
+                <main className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+            </WishlistProvider>
           </CartProvider>
         </AuthProvider>
       </body>

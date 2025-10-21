@@ -1,0 +1,32 @@
+import { NextRequest, NextResponse } from 'next/server'
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const token = request.headers.get('authorization')?.replace('Bearer ', '')
+    
+    if (!token) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/orders/${params.id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    if (!response.ok) {
+      return NextResponse.json({ message: 'Failed to fetch order' }, { status: response.status })
+    }
+
+    const data = await response.json()
+    return NextResponse.json(data)
+  } catch (error) {
+    console.error('Error fetching order:', error)
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
+  }
+}
