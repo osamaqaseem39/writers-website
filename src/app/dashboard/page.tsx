@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Header } from '@/components/Header'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
-import { useWishlist } from '@/contexts/WishlistContext'
+// import { useWishlist } from '@/contexts/WishlistContext'
 
 interface DashboardTab {
   id: string
@@ -33,7 +33,9 @@ interface Order {
 export default function DashboardPage() {
   const router = useRouter()
   const { user, isLoading } = useAuth()
-  const { wishlistItems, removeFromWishlist } = useWishlist()
+  // Temporarily disable wishlist to isolate the issue
+  const wishlistItems: any[] = []
+  const removeFromWishlist = (id: string) => {}
   
   // All state declarations must be at the top level
   const [activeTab, setActiveTab] = useState('overview')
@@ -69,12 +71,16 @@ export default function DashboardPage() {
         setIsLoadingOrders(true)
         try {
           const token = localStorage.getItem('token')
-          const res = await fetch('/api/orders', {
-            headers: token ? { Authorization: `Bearer ${token}` } as any : undefined
-          })
-          if (res.ok) {
-            const data = await res.json()
-            setOrders(data.orders || [])
+          if (token) {
+            const res = await fetch('/api/orders', {
+              headers: { Authorization: `Bearer ${token}` }
+            })
+            if (res.ok) {
+              const data = await res.json()
+              setOrders(data.orders || [])
+            } else {
+              console.warn('Failed to load orders:', res.status)
+            }
           }
         } catch (error) {
           console.error('Error loading orders:', error)
@@ -83,7 +89,11 @@ export default function DashboardPage() {
         }
       }
     }
-    loadOrders()
+    
+    // Only load orders if user is available and not admin
+    if (user && user.role !== 'admin') {
+      loadOrders()
+    }
   }, [user])
 
   // Initialize profile data
