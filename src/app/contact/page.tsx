@@ -24,9 +24,9 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Form + Info */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl">
+      {/* Contact Form */}
+      <section className="max-w-4xl mx-auto">
+        <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-8 shadow-2xl">
           <form className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -49,14 +49,6 @@ export default function ContactPage() {
             <button className="w-full text-white px-8 py-4 rounded-xl font-semibold bg-gradient-to-r from-brand-500 to-brand-600">Send Message</button>
           </form>
         </div>
-        <aside className="bg-white/70 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-6 shadow-xl">
-          <h3 className="text-lg font-semibold text-brand-900 mb-4">Quick Links</h3>
-          <ul className="text-brand-700 text-sm space-y-2">
-            <li><a className="hover:text-brand-900" href="/books">Browse Books</a></li>
-            <li><a className="hover:text-brand-900" href="/blog">Visit Blog</a></li>
-            <li><a className="hover:text-brand-900" href="/about">About Nawa</a></li>
-          </ul>
-        </aside>
       </section>
     </PageShell>
   )
