@@ -50,12 +50,6 @@ export default function ContactPage() {
           </form>
         </div>
         <aside className="bg-white/70 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-6 shadow-xl">
-          <h3 className="text-lg font-semibold text-brand-900 mb-4">Office Hours</h3>
-          <ul className="text-brand-700 text-sm space-y-2 mb-6">
-            <li>Mon - Fri: 10:00 AM - 6:00 PM</li>
-            <li>Sat: 11:00 AM - 3:00 PM</li>
-            <li>Sun: Closed</li>
-          </ul>
           <h3 className="text-lg font-semibold text-brand-900 mb-4">Quick Links</h3>
           <ul className="text-brand-700 text-sm space-y-2">
             <li><a className="hover:text-brand-900" href="/books">Browse Books</a></li>
