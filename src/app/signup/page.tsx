@@ -50,6 +50,7 @@ export default function SignupPage() {
     if (isFormInvalid) return
     const result = await register(name, email, password)
     if (result.success) {
+      // Redirect will be handled by the dashboard page based on user role
       router.push('/dashboard')
     } else {
       setError(result.message || 'Could not sign up. Please check your details.')

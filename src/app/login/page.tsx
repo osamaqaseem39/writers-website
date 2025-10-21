@@ -36,6 +36,7 @@ export default function LoginPage() {
     if (isFormInvalid) return
     const ok = await login(email, password)
     if (ok) {
+      // Redirect will be handled by the dashboard page based on user role
       router.push('/dashboard')
     } else {
       setError('Invalid credentials')
