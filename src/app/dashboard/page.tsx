@@ -14,6 +14,22 @@ interface DashboardTab {
 export default function DashboardPage() {
   const router = useRouter()
   const { user, isLoading } = useAuth()
+  
+  // All state declarations must be at the top level
+  const [activeTab, setActiveTab] = useState('overview')
+  const [books, setBooks] = useState<any[]>([])
+  const [reviews, setReviews] = useState<any[]>([])
+  const [blogPosts, setBlogPosts] = useState<any[]>([])
+  const [galleryImages, setGalleryImages] = useState<any[]>([])
+  const [isGalleryLoading, setIsGalleryLoading] = useState(false)
+  const [newImage, setNewImage] = useState({ title: '', description: '', src: '', status: 'Published' })
+  const [uploadFile, setUploadFile] = useState<File | null>(null)
+  const [isUploading, setIsUploading] = useState(false)
+  
+  // Edit states
+  const [editingBook, setEditingBook] = useState<any>(null)
+  const [editingPost, setEditingPost] = useState<any>(null)
+  const [editingImage, setEditingImage] = useState<any>(null)
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -31,20 +47,6 @@ export default function DashboardPage() {
       </div>
     )
   }
-  const [activeTab, setActiveTab] = useState('overview')
-  const [books, setBooks] = useState<any[]>([])
-  const [reviews, setReviews] = useState<any[]>([])
-  const [blogPosts, setBlogPosts] = useState<any[]>([])
-  const [galleryImages, setGalleryImages] = useState<any[]>([])
-  const [isGalleryLoading, setIsGalleryLoading] = useState(false)
-  const [newImage, setNewImage] = useState({ title: '', description: '', src: '', status: 'Published' })
-  const [uploadFile, setUploadFile] = useState<File | null>(null)
-  const [isUploading, setIsUploading] = useState(false)
-  
-  // Edit states
-  const [editingBook, setEditingBook] = useState<any>(null)
-  const [editingPost, setEditingPost] = useState<any>(null)
-  const [editingImage, setEditingImage] = useState<any>(null)
 
   useEffect(() => {
     const loadGallery = async () => {
