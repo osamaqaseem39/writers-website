@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/contexts/CartContext'
+import { formatCurrency } from '@/utils/currency'
 
 interface Book {
   _id: string
@@ -108,8 +109,8 @@ export function BookDetails({ book }: BookDetailsProps) {
 
       {/* Price */}
       <div className="mb-8">
-        <div className="text-3xl font-bold text-navy">${book.price}</div>
-        <div className="text-sm text-teal">Free shipping on orders over $25</div>
+        <div className="text-3xl font-bold text-navy">{formatCurrency(book.price)}</div>
+        <div className="text-sm text-teal">Free shipping on orders over ₨2,500</div>
       </div>
 
       {/* Action Buttons */}
@@ -118,7 +119,7 @@ export function BookDetails({ book }: BookDetailsProps) {
           onClick={handleBuyNow}
           className="w-full bg-gradient-to-r from-navy to-teal text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:scale-105"
         >
-          Buy Now - ${(book.price * quantity).toFixed(2)}
+          Buy Now - {formatCurrency(book.price * quantity)}
         </button>
         <button
           onClick={handleAddToCart}

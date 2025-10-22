@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { Header } from '@/components/Header'
 import BookForm from '@/components/forms/BookForm'
+import ProtectedRoute from '@/components/ProtectedRoute'
+import { formatCurrency } from '@/utils/currency'
 
 interface Book {
   _id: string
@@ -15,6 +17,7 @@ interface Book {
   status?: string
   sales?: number
   revenue?: number
+  featured?: boolean
 }
 
 export default function BooksManagementPage() {
@@ -26,14 +29,7 @@ export default function BooksManagementPage() {
   const [editingBook, setEditingBook] = useState<Book | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace('/login')
-    }
-    if (!isLoading && user && user.role !== 'admin') {
-      router.replace('/dashboard')
-    }
-  }, [user, isLoading, router])
+  // Authentication is now handled by ProtectedRoute component
 
   useEffect(() => {
     loadBooks()
@@ -80,6 +76,47 @@ export default function BooksManagementPage() {
     }
   }
 
+  const handleToggleFeatured = async (bookId: string, currentFeatured: boolean) => {
+    try {
+      const token = localStorage.getItem('token')
+      const res = await fetch(`/api/books/${bookId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({ featured: !currentFeatured })
+      })
+      if (res.ok) {
+        // If setting as featured, unfeature all other books first
+        if (!currentFeatured) {
+          const updatePromises = books
+            .filter(book => book._id !== bookId && book.featured)
+            .map(book => 
+              fetch(`/api/books/${book._id}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  ...(token ? { Authorization: `Bearer ${token}` } : {})
+                },
+                body: JSON.stringify({ featured: false })
+              })
+            )
+          await Promise.all(updatePromises)
+        }
+        
+        // Update the local state
+        setBooks(books.map(book => 
+          book._id === bookId 
+            ? { ...book, featured: !currentFeatured }
+            : { ...book, featured: false }
+        ))
+      }
+    } catch (error) {
+      console.error('Error toggling featured status:', error)
+    }
+  }
+
   const handleFormSubmit = async (formData: any) => {
     try {
       setIsSubmitting(true)
@@ -122,27 +159,14 @@ export default function BooksManagementPage() {
     setEditingBook(null)
   }
 
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Loading...</div>
-      </div>
-    )
-  }
-
-  if (user.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Access denied</div>
-      </div>
-    )
-  }
+  // Authentication and admin checks are now handled by ProtectedRoute component
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      
-      <main className="pt-20">
+    <ProtectedRoute requireAdmin={true}>
+      <div className="min-h-screen bg-white">
+        <Header />
+        
+        <main className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
             <h1 className="text-4xl font-serif text-brand-900 mb-4">Books Management</h1>
@@ -197,6 +221,7 @@ export default function BooksManagementPage() {
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Author</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Price</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Status</th>
+                          <th className="text-left py-4 px-6 font-medium text-brand-700">Featured</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Actions</th>
                         </tr>
                       </thead>
@@ -214,7 +239,7 @@ export default function BooksManagementPage() {
                               <div className="font-medium text-brand-900">{book.title}</div>
                             </td>
                             <td className="py-4 px-6 text-brand-700">{book.author}</td>
-                            <td className="py-4 px-6 font-medium text-brand-900">${book.price.toFixed(2)}</td>
+                            <td className="py-4 px-6 font-medium text-brand-900">{formatCurrency(book.price)}</td>
                             <td className="py-4 px-6">
                               <span className={`px-3 py-1 rounded-full text-sm ${
                                 book.status === 'Published' 
@@ -225,7 +250,26 @@ export default function BooksManagementPage() {
                               </span>
                             </td>
                             <td className="py-4 px-6">
+                              <span className={`px-3 py-1 rounded-full text-sm ${
+                                book.featured 
+                                  ? 'bg-yellow-100 text-yellow-800' 
+                                  : 'bg-gray-100 text-gray-600'
+                              }`}>
+                                {book.featured ? 'Featured' : 'Regular'}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6">
                               <div className="flex space-x-2">
+                                <button
+                                  onClick={() => handleToggleFeatured(book._id, book.featured || false)}
+                                  className={`text-sm font-medium ${
+                                    book.featured 
+                                      ? 'text-orange-600 hover:text-orange-700' 
+                                      : 'text-brand-600 hover:text-brand-700'
+                                  }`}
+                                >
+                                  {book.featured ? 'Unfeature' : 'Set Featured'}
+                                </button>
                                 <button
                                   onClick={() => handleEditBook(book)}
                                   className="text-brand-600 hover:text-brand-700 text-sm font-medium"
@@ -251,6 +295,7 @@ export default function BooksManagementPage() {
           )}
         </div>
       </main>
-    </div>
+      </div>
+    </ProtectedRoute>
   )
 }

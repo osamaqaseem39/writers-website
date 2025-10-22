@@ -5,6 +5,7 @@ import { Header } from '@/components/Header'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/contexts/CartContext'
 import { useAuth } from '@/contexts/AuthContext'
+import { formatCurrency } from '@/utils/currency'
 
 interface CartItem {
   id: number
@@ -40,7 +41,7 @@ export default function CheckoutPage() {
   })
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-  const shipping = subtotal > 25 ? 0 : 4.99
+  const shipping = subtotal > 2500 ? 0 : 500
   const tax = subtotal * 0.08
   const total = subtotal + shipping + tax
 
@@ -464,7 +465,7 @@ export default function CheckoutPage() {
                           </div>
                         </div>
                         <div className="text-brand-800 font-medium">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          {formatCurrency(item.price * item.quantity)}
                         </div>
                       </div>
                     ))
@@ -475,19 +476,19 @@ export default function CheckoutPage() {
                 <div className="space-y-3 border-t border-brand-200 pt-4">
                   <div className="flex justify-between text-brand-700">
                     <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>{formatCurrency(subtotal)}</span>
                   </div>
                   <div className="flex justify-between text-brand-700">
                     <span>Shipping</span>
-                    <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                    <span>{shipping === 0 ? 'Free' : formatCurrency(shipping)}</span>
                   </div>
                   <div className="flex justify-between text-brand-700">
                     <span>Tax</span>
-                    <span>${tax.toFixed(2)}</span>
+                    <span>{formatCurrency(tax)}</span>
                   </div>
                   <div className="flex justify-between text-lg font-semibold text-brand-900 border-t border-brand-200 pt-3">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>{formatCurrency(total)}</span>
                   </div>
                 </div>
               </div>

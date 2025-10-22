@@ -2,6 +2,7 @@
 
 import { Header } from '@/components/Header'
 import { useRouter } from 'next/navigation'
+import { formatCurrency } from '@/utils/currency'
 
 export default function OrderConfirmationPage() {
   const router = useRouter()
@@ -37,7 +38,7 @@ export default function OrderConfirmationPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-brand-600">Total Amount:</span>
-                  <span className="text-brand-900 font-medium">$24.99</span>
+                  <span className="text-brand-900 font-medium">{formatCurrency(2499)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-brand-600">Status:</span>

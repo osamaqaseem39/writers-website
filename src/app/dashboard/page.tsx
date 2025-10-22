@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { Header } from '@/components/Header'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import ProtectedRoute from '@/components/ProtectedRoute'
+import { formatCurrency } from '@/utils/currency'
 // import { useWishlist } from '@/contexts/WishlistContext'
 
 interface DashboardTab {
@@ -57,12 +59,7 @@ export default function DashboardPage() {
   const [isEditingProfile, setIsEditingProfile] = useState(false)
   const [profileData, setProfileData] = useState({ name: '', email: '' })
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace('/login')
-    }
-    // Remove the redirect for customers - let them access the dashboard
-  }, [user, isLoading, router])
+  // Authentication is now handled by ProtectedRoute component
 
   // Load customer orders
   useEffect(() => {
@@ -103,13 +100,7 @@ export default function DashboardPage() {
     }
   }, [user])
 
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Loading...</div>
-      </div>
-    )
-  }
+  // Loading and authentication checks are now handled by ProtectedRoute
 
   useEffect(() => {
     const loadGallery = async () => {
@@ -358,10 +349,11 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      
-      <main className="pt-20">
+    <ProtectedRoute>
+      <div className="min-h-screen bg-white">
+        <Header />
+        
+        <main className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
             <h1 className="text-4xl font-serif text-brand-900 mb-4">
@@ -406,7 +398,7 @@ export default function DashboardPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-brand-600">Total Revenue</p>
-                          <p className="text-2xl font-bold text-brand-900">${totalRevenue.toFixed(2)}</p>
+                          <p className="text-2xl font-bold text-brand-900">{formatCurrency(totalRevenue)}</p>
                         </div>
                         <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
                           <span className="text-2xl">💰</span>
@@ -486,7 +478,7 @@ export default function DashboardPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-sm text-brand-600">Total Spent</p>
-                          <p className="text-2xl font-bold text-brand-900">${totalSpent.toFixed(2)}</p>
+                          <p className="text-2xl font-bold text-brand-900">{formatCurrency(totalSpent)}</p>
                         </div>
                         <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center">
                           <span className="text-2xl">💰</span>
@@ -604,7 +596,7 @@ export default function DashboardPage() {
                       <div className="p-4">
                         <h4 className="font-medium text-brand-900 mb-2">{item.title}</h4>
                         <p className="text-sm text-brand-600 mb-2">by {item.author}</p>
-                        <p className="text-lg font-bold text-brand-700 mb-3">${item.price}</p>
+                        <p className="text-lg font-bold text-brand-700 mb-3">{formatCurrency(item.price)}</p>
                         <div className="flex space-x-2">
                           <a 
                             href={`/book/${item.id}`}
@@ -781,7 +773,7 @@ export default function DashboardPage() {
                               </p>
                             </div>
                             <div className="text-right">
-                              <p className="text-lg font-bold text-brand-900">${order.totalAmount.toFixed(2)}</p>
+                              <p className="text-lg font-bold text-brand-900">{formatCurrency(order.totalAmount)}</p>
                               <span className={`px-2 py-1 rounded-full text-xs ${
                                 order.status === 'Paid' ? 'bg-green-100 text-green-800' :
                                 order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
@@ -805,7 +797,7 @@ export default function DashboardPage() {
                                   <p className="text-sm text-brand-600">by {item.book.author}</p>
                                 </div>
                                 <div className="text-right">
-                                  <p className="font-medium text-brand-900">${item.price.toFixed(2)}</p>
+                                  <p className="font-medium text-brand-900">{formatCurrency(item.price)}</p>
                                   <p className="text-sm text-brand-600">Qty: {item.quantity}</p>
                                 </div>
                               </div>
@@ -821,6 +813,7 @@ export default function DashboardPage() {
           )}
         </div>
       </main>
-    </div>
+      </div>
+    </ProtectedRoute>
   )
 }

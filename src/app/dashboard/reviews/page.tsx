@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { Header } from '@/components/Header'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 interface Review {
   _id: string
@@ -20,14 +21,7 @@ export default function ReviewsManagementPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [isLoadingReviews, setIsLoadingReviews] = useState(true)
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace('/login')
-    }
-    if (!isLoading && user && user.role !== 'admin') {
-      router.replace('/dashboard')
-    }
-  }, [user, isLoading, router])
+  // Authentication is now handled by ProtectedRoute component
 
   useEffect(() => {
     loadReviews()
@@ -86,30 +80,17 @@ export default function ReviewsManagementPage() {
     }
   }
 
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Loading...</div>
-      </div>
-    )
-  }
-
-  if (user.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Access denied</div>
-      </div>
-    )
-  }
+  // Authentication and admin checks are now handled by ProtectedRoute component
 
   const pendingReviews = reviews.filter(review => !review.approved)
   const approvedReviews = reviews.filter(review => review.approved)
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      
-      <main className="pt-20">
+    <ProtectedRoute requireAdmin={true}>
+      <div className="min-h-screen bg-white">
+        <Header />
+        
+        <main className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
             <h1 className="text-4xl font-serif text-brand-900 mb-4">Reviews Management</h1>
@@ -231,6 +212,7 @@ export default function ReviewsManagementPage() {
           )}
         </div>
       </main>
-    </div>
+      </div>
+    </ProtectedRoute>
   )
 }

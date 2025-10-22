@@ -5,6 +5,8 @@ import { useRouter, useParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { Header } from '@/components/Header'
 import BookForm from '@/components/forms/BookForm'
+import ProtectedRoute from '@/components/ProtectedRoute'
+import { formatCurrency } from '@/utils/currency'
 
 interface Book {
   _id: string
@@ -28,14 +30,7 @@ export default function BookDetailPage() {
   const [showForm, setShowForm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace('/login')
-    }
-    if (!isLoading && user && user.role !== 'admin') {
-      router.replace('/dashboard')
-    }
-  }, [user, isLoading, router])
+  // Authentication is now handled by ProtectedRoute component
 
   useEffect(() => {
     if (params.id) {
@@ -114,21 +109,7 @@ export default function BookDetailPage() {
     setShowForm(false)
   }
 
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Loading...</div>
-      </div>
-    )
-  }
-
-  if (user.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Access denied</div>
-      </div>
-    )
-  }
+  // Authentication and admin checks are now handled by ProtectedRoute component
 
   if (isLoadingBook) {
     return (
@@ -147,10 +128,11 @@ export default function BookDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      
-      <main className="pt-20">
+    <ProtectedRoute requireAdmin={true}>
+      <div className="min-h-screen bg-white">
+        <Header />
+        
+        <main className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
             <div className="flex items-center space-x-4 mb-4">
@@ -204,7 +186,7 @@ export default function BookDetailPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-brand-700 mb-1">Price</label>
-                      <p className="text-2xl font-bold text-brand-900">${book.price.toFixed(2)}</p>
+                      <p className="text-2xl font-bold text-brand-900">{formatCurrency(book.price)}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-brand-700 mb-1">Status</label>
@@ -228,7 +210,7 @@ export default function BookDetailPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-brand-700 mb-1">Revenue</label>
-                      <p className="text-2xl font-bold text-brand-900">${(book.revenue || 0).toFixed(2)}</p>
+                      <p className="text-2xl font-bold text-brand-900">{formatCurrency(book.revenue || 0)}</p>
                     </div>
                   </div>
                 </div>
@@ -266,6 +248,7 @@ export default function BookDetailPage() {
           )}
         </div>
       </main>
-    </div>
+      </div>
+    </ProtectedRoute>
   )
 }

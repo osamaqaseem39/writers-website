@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { Header } from '@/components/Header'
 import GalleryForm from '@/components/forms/GalleryForm'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 interface GalleryImage {
   _id: string
@@ -24,14 +25,7 @@ export default function GalleryManagementPage() {
   const [editingImage, setEditingImage] = useState<GalleryImage | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.replace('/login')
-    }
-    if (!isLoading && user && user.role !== 'admin') {
-      router.replace('/dashboard')
-    }
-  }, [user, isLoading, router])
+  // Authentication is now handled by ProtectedRoute component
 
   useEffect(() => {
     loadImages()
@@ -123,27 +117,14 @@ export default function GalleryManagementPage() {
     setEditingImage(null)
   }
 
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Loading...</div>
-      </div>
-    )
-  }
-
-  if (user.role !== 'admin') {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-brand-700">Access denied</div>
-      </div>
-    )
-  }
+  // Authentication and admin checks are now handled by ProtectedRoute component
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      
-      <main className="pt-20">
+    <ProtectedRoute requireAdmin={true}>
+      <div className="min-h-screen bg-white">
+        <Header />
+        
+        <main className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
             <h1 className="text-4xl font-serif text-brand-900 mb-4">Gallery Management</h1>
@@ -236,6 +217,7 @@ export default function GalleryManagementPage() {
           )}
         </div>
       </main>
-    </div>
+      </div>
+    </ProtectedRoute>
   )
 }

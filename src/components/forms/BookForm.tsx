@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { formatCurrency } from '@/utils/currency'
 
 interface BookFormProps {
   book?: {
@@ -10,6 +11,7 @@ interface BookFormProps {
     price: number
     coverImageUrl?: string
     status?: string
+    featured?: boolean
   }
   onSubmit: (data: any) => Promise<void>
   onCancel: () => void
@@ -22,7 +24,8 @@ export default function BookForm({ book, onSubmit, onCancel, isLoading = false }
     author: book?.author || '',
     price: book?.price || 0,
     coverImageUrl: book?.coverImageUrl || '',
-    status: book?.status || 'Published'
+    status: book?.status || 'Published',
+    featured: book?.featured || false
   })
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
@@ -124,6 +127,20 @@ export default function BookForm({ book, onSubmit, onCancel, isLoading = false }
               <option value="Draft">Draft</option>
             </select>
           </div>
+        </div>
+
+        <div>
+          <label className="flex items-center space-x-3">
+            <input
+              type="checkbox"
+              checked={formData.featured}
+              onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+              className="w-4 h-4 text-brand-600 border-brand-300 rounded focus:ring-brand-500"
+            />
+            <span className="text-sm font-medium text-brand-700">
+              Set as Featured Book (only one book can be featured at a time)
+            </span>
+          </label>
         </div>
 
         <div>

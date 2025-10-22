@@ -3,21 +3,9 @@
 import { Header } from '@/components/Header'
 import { useCart } from '@/contexts/CartContext'
 import { useEffect, useState } from 'react'
+import { formatCurrency } from '@/utils/currency'
+import { getFallbackData, Book } from '@/data/fallbackData'
 
-interface Book {
-  _id: string
-  title: string
-  author: string
-  genre?: string
-  description: string
-  year?: string
-  pages?: number
-  price: number
-  coverImageUrl: string
-  rating?: number
-  reviews?: number
-  status: string
-}
 
 export default function BooksPage() {
   const { addToCart, isInCart } = useCart()
@@ -36,24 +24,9 @@ export default function BooksPage() {
         setBooks(data.books || [])
       } catch (err) {
         console.error('Error fetching books:', err)
-        setError('Failed to load books')
-        // Fallback to mock data
-        setBooks([
-          {
-            _id: "1",
-            title: "You Never Cried",
-            author: "Nawa Sohail",
-            genre: "Fiction",
-            description: "Pace Town is a place of quiet nights, rustling leaves, and stories waiting to be told. Dan, a gentle bookseller and devoted father, has long kept his heart closed. When Rose arrives, carrying secrets of her own, everything begins to change.",
-            year: "2024",
-            pages: 329,
-            price: 24.99,
-            coverImageUrl: "/bookhomepage.jpeg",
-            rating: 5.0,
-            reviews: 6,
-            status: "Published"
-          }
-        ])
+        setError('Failed to load books - showing fallback data')
+        // Use fallback data
+        setBooks(getFallbackData('books') as Book[])
       } finally {
         setLoading(false)
       }
@@ -179,7 +152,7 @@ export default function BooksPage() {
                     {/* Price and Actions */}
                     <div>
                       <div className="flex items-center justify-between mb-4">
-                        <span className="text-2xl font-bold text-brand-900">${book.price}</span>
+                        <span className="text-2xl font-bold text-brand-900">{formatCurrency(book.price)}</span>
                         <span className="text-sm text-brand-600">Free shipping</span>
                       </div>
                       
