@@ -83,7 +83,7 @@ export function Blog() {
         )}
 
         {/* Featured Post - Show first post as featured */}
-        {blogPosts.length > 0 && (
+        {blogPosts && blogPosts.length > 0 && blogPosts[0] && (
           <div 
             ref={featuredRef}
             className={`mb-16 scroll-animate-scale scroll-animate-delay-200 ${featuredVisible ? 'animate-in' : ''}`}
@@ -114,7 +114,7 @@ export function Blog() {
                       {blogPosts[0].title}
                     </h3>
                     <p className="text-brand-800 text-lg leading-relaxed mb-6">
-                      {blogPosts[0].content.substring(0, 200)}...
+                      {blogPosts[0].content?.substring(0, 200) || 'No content available'}...
                     </p>
                     <div className="flex items-center justify-between text-sm text-brand-600 mb-6">
                       <span>{new Date(blogPosts[0].createdAt).toLocaleDateString()}</span>
@@ -134,12 +134,12 @@ export function Blog() {
         )}
 
         {/* Other Blog Posts */}
-        {blogPosts.length > 1 && (
+        {blogPosts && blogPosts.length > 1 && (
           <div 
             ref={postsRef}
             className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 scroll-animate scroll-animate-delay-300 ${postsVisible ? 'animate-in' : ''}`}
           >
-            {blogPosts.slice(1).map((post) => (
+            {blogPosts.slice(1).filter(post => post && post._id).map((post) => (
               <div key={post._id} className="group">
                 <div className="bg-white/70 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-6 shadow-lg transition-all duration-300 group-hover:bg-white/80 group-hover:scale-105 group-hover:shadow-2xl h-full">
                   {/* Post Image */}
@@ -160,7 +160,7 @@ export function Blog() {
                       {post.title}
                     </h3>
                     <p className="text-brand-800 text-sm leading-relaxed mb-4">
-                      {post.content.substring(0, 100)}...
+                      {post.content?.substring(0, 100) || 'No content available'}...
                     </p>
                     
                     {/* Post Meta */}
