@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { formatCurrency } from '@/utils/currency'
 import { fetchFeaturedBookWithFallback } from '@/utils/apiWithFallback'
-import { Book } from '@/data/fallbackData'
+import { getFallbackData } from '@/data/fallbackData'
+import { Book } from '@/types/uniformData'
 
 
 export function Books() {

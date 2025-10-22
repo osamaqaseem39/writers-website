@@ -4,7 +4,8 @@ import { Header } from '@/components/Header'
 import { useCart } from '@/contexts/CartContext'
 import { useEffect, useState } from 'react'
 import { formatCurrency } from '@/utils/currency'
-import { getFallbackData, Book } from '@/data/fallbackData'
+import { getFallbackData } from '@/data/fallbackData'
+import { Book } from '@/types/uniformData'
 
 
 export default function BooksPage() {
