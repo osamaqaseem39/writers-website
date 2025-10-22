@@ -182,7 +182,7 @@ export default function BlogManagementPage() {
                             <span>{post.views || 0} views</span>
                           </div>
                           <p className="text-brand-700 line-clamp-3">
-                            {post.content.substring(0, 200)}...
+                            {post.content?.substring(0, 200) || 'No content available'}...
                           </p>
                         </div>
                         <div className="flex items-center space-x-2 ml-4">

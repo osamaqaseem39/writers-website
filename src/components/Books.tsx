@@ -163,13 +163,13 @@ export function Books() {
                   
                   <p className="text-lg text-brand-800 leading-relaxed mb-4">
                     <span className="hidden sm:inline">{book.description}</span>
-                    <span className="sm:hidden">{book.description.substring(0, 150)}...</span>
+                    <span className="sm:hidden">{book.description?.substring(0, 150) || 'No description available'}...</span>
                   </p>
                   
                   {book.fullDescription && (
                     <p className="text-lg text-brand-800 leading-relaxed mb-6">
                       <span className="hidden sm:inline">{book.fullDescription}</span>
-                      <span className="sm:hidden">{book.fullDescription.substring(0, 100)}...</span>
+                      <span className="sm:hidden">{book.fullDescription?.substring(0, 100) || 'No full description available'}...</span>
                     </p>
                   )}
 
