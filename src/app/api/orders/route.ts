@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://writer-server.vercel.app'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
-    const response = await fetch(`${API_BASE_URL}/api/orders`, {
+    const response = await fetch(`${BACKEND_URL}/api/orders`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     
-    const response = await fetch(`${API_BASE_URL}/api/orders`, {
+    const response = await fetch(`${BACKEND_URL}/api/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

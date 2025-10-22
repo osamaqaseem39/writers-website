@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://writer-server.vercel.app'
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://writer-server.vercel.app'
 
 export async function GET(
   request: NextRequest,
@@ -14,7 +14,7 @@ export async function GET(
     }
 
     const { id } = await params
-    const response = await fetch(`${API_BASE_URL}/api/orders/${id}`, {
+    const response = await fetch(`${BACKEND_URL}/api/orders/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
