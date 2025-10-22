@@ -43,7 +43,7 @@ export default function BooksPage() {
       author: book.author,
       price: book.price,
       format: 'Hardcover', // Default format
-      coverImage: book.coverImageUrl
+      coverImage: book.coverImageUrl || '/bookhomepage.jpeg'
     })
   }
 

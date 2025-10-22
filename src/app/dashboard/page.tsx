@@ -64,7 +64,7 @@ export default function DashboardPage() {
   // Load customer orders
   useEffect(() => {
     const loadOrders = async () => {
-      if (user && user.role !== 'admin') {
+      if (user && user?.role !== 'admin') {
         setIsLoadingOrders(true)
         try {
           const token = localStorage.getItem('token')
@@ -88,7 +88,7 @@ export default function DashboardPage() {
     }
     
     // Only load orders if user is available and not admin
-    if (user && user.role !== 'admin') {
+    if (user && user?.role !== 'admin') {
       loadOrders()
     }
   }, [user])
@@ -96,7 +96,7 @@ export default function DashboardPage() {
   // Initialize profile data
   useEffect(() => {
     if (user) {
-      setProfileData({ name: user.name, email: user.email })
+      setProfileData({ name: user?.name || '', email: user?.email || '' })
     }
   }, [user])
 
@@ -137,7 +137,7 @@ export default function DashboardPage() {
     { id: 'wishlist', name: 'Wishlist', icon: '❤️' }
   ]
 
-  const tabs = user.role === 'admin' ? adminTabs : customerTabs
+  const tabs = user?.role === 'admin' ? adminTabs : customerTabs
 
   useEffect(() => {
     // Load initial data for books, reviews, blog
@@ -357,10 +357,10 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="mb-8">
             <h1 className="text-4xl font-serif text-brand-900 mb-4">
-              {user.role === 'admin' ? 'Admin Dashboard' : 'My Dashboard'}
+              {user?.role === 'admin' ? 'Admin Dashboard' : 'My Dashboard'}
             </h1>
             <p className="text-lg text-brand-700">
-              {user.role === 'admin' 
+              {user?.role === 'admin' 
                 ? 'Manage your content and ecommerce' 
                 : 'Welcome back! View your orders and account information'
               }
@@ -392,7 +392,7 @@ export default function DashboardPage() {
             <div className="space-y-8">
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {user.role === 'admin' ? (
+                {user?.role === 'admin' ? (
                   <>
                     <div className="bg-white border border-brand-200 rounded-2xl p-6">
                       <div className="flex items-center justify-between">
@@ -493,7 +493,7 @@ export default function DashboardPage() {
               <div className="bg-white border border-brand-200 rounded-2xl p-8">
                 <h3 className="text-xl font-serif text-brand-900 mb-6">Recent Activity</h3>
                 <div className="text-brand-600">
-                  {user.role === 'admin' 
+                  {user?.role === 'admin' 
                     ? 'No recent activity.' 
                     : 'Welcome! Start by browsing our books or creating an account.'
                   }
@@ -503,7 +503,7 @@ export default function DashboardPage() {
           )}
 
           {/* Customer Profile Tab */}
-          {activeTab === 'profile' && user.role !== 'admin' && (
+          {activeTab === 'profile' && user?.role !== 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <h3 className="text-xl font-serif text-brand-900 mb-6">Profile Information</h3>
               <div className="space-y-6">
@@ -512,7 +512,7 @@ export default function DashboardPage() {
                     <label className="block text-sm font-medium text-brand-700 mb-2">Name</label>
                     <input 
                       type="text" 
-                      value={isEditingProfile ? profileData.name : user.name} 
+                      value={isEditingProfile ? profileData.name : user?.name || ''} 
                       onChange={isEditingProfile ? (e) => setProfileData({...profileData, name: e.target.value}) : undefined}
                       className={`w-full border border-brand-200 rounded-lg px-3 py-2 ${isEditingProfile ? 'bg-white' : 'bg-gray-50'}`}
                       readOnly={!isEditingProfile}
@@ -522,7 +522,7 @@ export default function DashboardPage() {
                     <label className="block text-sm font-medium text-brand-700 mb-2">Email</label>
                     <input 
                       type="email" 
-                      value={isEditingProfile ? profileData.email : user.email} 
+                      value={isEditingProfile ? profileData.email : user?.email || ''} 
                       onChange={isEditingProfile ? (e) => setProfileData({...profileData, email: e.target.value}) : undefined}
                       className={`w-full border border-brand-200 rounded-lg px-3 py-2 ${isEditingProfile ? 'bg-white' : 'bg-gray-50'}`}
                       readOnly={!isEditingProfile}
@@ -553,7 +553,7 @@ export default function DashboardPage() {
                       <button 
                         onClick={() => {
                           setIsEditingProfile(false)
-                          setProfileData({ name: user.name, email: user.email })
+                          setProfileData({ name: user?.name || '', email: user?.email || '' })
                         }}
                         className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
                       >
@@ -567,7 +567,7 @@ export default function DashboardPage() {
           )}
 
           {/* Customer Wishlist Tab */}
-          {activeTab === 'wishlist' && user.role !== 'admin' && (
+          {activeTab === 'wishlist' && user?.role !== 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <h3 className="text-xl font-serif text-brand-900 mb-6">My Wishlist</h3>
               {wishlistItems.length === 0 ? (
@@ -620,7 +620,7 @@ export default function DashboardPage() {
           )}
 
           {/* Books Tab - Admin Only */}
-          {activeTab === 'books' && user.role === 'admin' && (
+          {activeTab === 'books' && user?.role === 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Books Management</h3>
@@ -647,7 +647,7 @@ export default function DashboardPage() {
           )}
 
           {/* Reviews Tab - Admin Only */}
-          {activeTab === 'reviews' && user.role === 'admin' && (
+          {activeTab === 'reviews' && user?.role === 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Reviews Management</h3>
@@ -674,7 +674,7 @@ export default function DashboardPage() {
           )}
 
           {/* Blog Tab - Admin Only */}
-          {activeTab === 'blog' && user.role === 'admin' && (
+          {activeTab === 'blog' && user?.role === 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Blog Management</h3>
@@ -701,7 +701,7 @@ export default function DashboardPage() {
           )}
 
           {/* Gallery Tab - Admin Only */}
-          {activeTab === 'gallery' && user.role === 'admin' && (
+          {activeTab === 'gallery' && user?.role === 'admin' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-serif text-brand-900">Gallery Management</h3>
@@ -731,9 +731,9 @@ export default function DashboardPage() {
           {activeTab === 'orders' && (
             <div className="bg-white border border-brand-200 rounded-2xl p-8">
               <h3 className="text-xl font-serif text-brand-900 mb-6">
-                {user.role === 'admin' ? 'Orders Management' : 'My Orders'}
+                {user?.role === 'admin' ? 'Orders Management' : 'My Orders'}
               </h3>
-              {user.role === 'admin' ? (
+              {user?.role === 'admin' ? (
                 <div className="text-center py-12">
                   <div className="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl">🛒</span>
