@@ -27,6 +27,8 @@ export interface Book {
   publisher?: string
   publishDate?: string
   fullDescription?: string
+  sales?: number
+  revenue?: number
   createdAt?: string
   updatedAt?: string
 }

@@ -290,11 +290,11 @@ export default function BookDetailPage() {
                   <div className="space-y-2">
                     <div>
                       <label className="block text-sm font-medium text-brand-700 mb-1">Created</label>
-                      <p className="text-brand-700">{new Date(book.createdAt).toLocaleString()}</p>
+                      <p className="text-brand-700">{book.createdAt ? new Date(book.createdAt).toLocaleString() : 'N/A'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-brand-700 mb-1">Last Updated</label>
-                      <p className="text-brand-700">{new Date(book.updatedAt).toLocaleString()}</p>
+                      <p className="text-brand-700">{book.updatedAt ? new Date(book.updatedAt).toLocaleString() : 'N/A'}</p>
                     </div>
                   </div>
                 </div>
