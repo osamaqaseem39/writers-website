@@ -7,31 +7,7 @@ import { Header } from '@/components/Header'
 import BookForm from '@/components/forms/BookForm'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { formatCurrency } from '@/utils/currency'
-
-interface Book {
-  _id: string
-  title: string
-  author: string
-  price: number
-  coverImageUrl?: string
-  status?: string
-  sales?: number
-  revenue?: number
-  featured?: boolean
-  genre?: string
-  year?: string
-  pages?: number
-  rating?: number
-  reviews?: number
-  isbn?: string
-  language?: string
-  readingTime?: string
-  publisher?: string
-  publishDate?: string
-  description?: string
-  fullDescription?: string
-  inventory?: number
-}
+import { Book } from '@/types/uniformData'
 
 export default function BooksManagementPage() {
   const router = useRouter()

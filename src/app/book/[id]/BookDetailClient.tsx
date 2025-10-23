@@ -4,27 +4,7 @@ import { Header } from '@/components/Header'
 import { BookImage } from '@/components/BookImage'
 import { BookDetails } from '@/components/BookDetails'
 import { useEffect, useState } from 'react'
-
-interface Book {
-  _id: string
-  title: string
-  author: string
-  genre?: string
-  description: string
-  fullDescription?: string
-  year?: string
-  pages?: number
-  status: string
-  isbn?: string
-  language?: string
-  readingTime?: string
-  publisher?: string
-  publishDate?: string
-  price: number
-  coverImageUrl: string
-  rating?: number
-  reviews?: number
-}
+import { Book } from '@/types/uniformData'
 
 interface BookDetailClientProps {
   id: string
