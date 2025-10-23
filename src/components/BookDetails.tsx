@@ -23,7 +23,7 @@ export function BookDetails({ book }: BookDetailsProps) {
       author: book.author,
       price: book.price,
       format: 'hardcover',
-      coverImage: book.coverImageUrl
+      coverImage: book.coverImageUrl || '/bookhomepage.jpeg'
     })
   }
 

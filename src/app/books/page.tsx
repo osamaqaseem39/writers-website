@@ -89,7 +89,7 @@ export default function BooksPage() {
                   <div className="relative mb-6">
                     <div className="absolute -inset-2 bg-gradient-to-br from-brand-200 via-brand-300 to-brand-400 rounded-xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
                     <img 
-                      src={book.coverImageUrl} 
+                      src={book.coverImageUrl || '/bookhomepage.jpeg'} 
                       alt={book.title}
                       className="relative w-full h-64 object-cover rounded-xl shadow-lg z-10 group-hover:scale-105 transition-transform duration-500"
                     />
