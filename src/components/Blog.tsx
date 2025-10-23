@@ -28,7 +28,8 @@ export function Blog() {
         console.error('Error fetching blog posts:', err)
         setError('Failed to load blog posts - showing fallback data')
         // Use fallback data
-        setBlogPosts(getFallbackData('blog') as BlogPost[])
+        const fallbackData = getFallbackData('blog') as BlogPost[]
+        setBlogPosts(fallbackData)
       } finally {
         setLoading(false)
       }

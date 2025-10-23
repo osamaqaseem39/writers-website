@@ -10,12 +10,12 @@ export interface Book {
   _id: string
   title: string
   author: string
-  description: string
+  description?: string
   price: number
   coverImageUrl?: string
   status: 'Draft' | 'Published'
-  inventory: number
-  featured: boolean
+  inventory?: number
+  featured?: boolean
   genre?: string
   year?: string
   pages?: number
@@ -27,8 +27,8 @@ export interface Book {
   publisher?: string
   publishDate?: string
   fullDescription?: string
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 // BlogPost Interface - Matches backend BlogPost model

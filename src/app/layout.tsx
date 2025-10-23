@@ -43,7 +43,7 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
-              <div className="flex flex-col scale-screen">
+              <div className="flex flex-col">
                 <main className="flex-1">
                   {children}
                 </main>

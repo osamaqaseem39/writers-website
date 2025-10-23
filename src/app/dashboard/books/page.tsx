@@ -18,6 +18,19 @@ interface Book {
   sales?: number
   revenue?: number
   featured?: boolean
+  genre?: string
+  year?: string
+  pages?: number
+  rating?: number
+  reviews?: number
+  isbn?: string
+  language?: string
+  readingTime?: string
+  publisher?: string
+  publishDate?: string
+  description?: string
+  fullDescription?: string
+  inventory?: number
 }
 
 export default function BooksManagementPage() {
@@ -219,6 +232,7 @@ export default function BooksManagementPage() {
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Cover</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Title</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Author</th>
+                          <th className="text-left py-4 px-6 font-medium text-brand-700">Genre</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Price</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Status</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Featured</th>
@@ -239,6 +253,7 @@ export default function BooksManagementPage() {
                               <div className="font-medium text-brand-900">{book.title}</div>
                             </td>
                             <td className="py-4 px-6 text-brand-700">{book.author}</td>
+                            <td className="py-4 px-6 text-brand-700">{book.genre || 'N/A'}</td>
                             <td className="py-4 px-6 font-medium text-brand-900">{formatCurrency(book.price)}</td>
                             <td className="py-4 px-6">
                               <span className={`px-3 py-1 rounded-full text-sm ${

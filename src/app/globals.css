@@ -88,6 +88,11 @@
     overflow: visible;
   }
 
+  /* Fix double scroll issue */
+  .scale-screen {
+    overflow: visible;
+  }
+
 
   /* Simple smooth scroll */
   html {

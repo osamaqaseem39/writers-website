@@ -19,6 +19,20 @@ interface Book {
   revenue?: number
   createdAt: string
   updatedAt: string
+  genre?: string
+  year?: string
+  pages?: number
+  rating?: number
+  reviews?: number
+  isbn?: string
+  language?: string
+  readingTime?: string
+  publisher?: string
+  publishDate?: string
+  description?: string
+  fullDescription?: string
+  inventory?: number
+  featured?: boolean
 }
 
 export default function BookDetailPage() {
@@ -174,8 +188,8 @@ export default function BookDetailPage() {
               {/* Book Details */}
               <div className="space-y-6">
                 <div className="bg-white border border-brand-200 rounded-2xl p-6">
-                  <h2 className="text-xl font-serif text-brand-900 mb-4">Book Information</h2>
-                  <div className="space-y-4">
+                  <h2 className="text-xl font-serif text-brand-900 mb-4">Basic Information</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-brand-700 mb-1">Title</label>
                       <p className="text-lg font-medium text-brand-900">{book.title}</p>
@@ -185,8 +199,8 @@ export default function BookDetailPage() {
                       <p className="text-lg text-brand-700">{book.author}</p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-brand-700 mb-1">Price</label>
-                      <p className="text-2xl font-bold text-brand-900">{formatCurrency(book.price)}</p>
+                      <label className="block text-sm font-medium text-brand-700 mb-1">Genre</label>
+                      <p className="text-lg text-brand-700">{book.genre || 'N/A'}</p>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-brand-700 mb-1">Status</label>
@@ -198,8 +212,90 @@ export default function BookDetailPage() {
                         {book.status || 'Published'}
                       </span>
                     </div>
+                    <div>
+                      <label className="block text-sm font-medium text-brand-700 mb-1">Price</label>
+                      <p className="text-2xl font-bold text-brand-900">{formatCurrency(book.price)}</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-brand-700 mb-1">Inventory</label>
+                      <p className="text-lg text-brand-700">{book.inventory || 0} copies</p>
+                    </div>
                   </div>
                 </div>
+
+                <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                  <h2 className="text-xl font-serif text-brand-900 mb-4">Book Details</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {book.year && (
+                      <div>
+                        <label className="block text-sm font-medium text-brand-700 mb-1">Year Published</label>
+                        <p className="text-brand-700">{book.year}</p>
+                      </div>
+                    )}
+                    {book.pages && (
+                      <div>
+                        <label className="block text-sm font-medium text-brand-700 mb-1">Pages</label>
+                        <p className="text-brand-700">{book.pages}</p>
+                      </div>
+                    )}
+                    {book.readingTime && (
+                      <div>
+                        <label className="block text-sm font-medium text-brand-700 mb-1">Reading Time</label>
+                        <p className="text-brand-700">{book.readingTime}</p>
+                      </div>
+                    )}
+                    {book.language && (
+                      <div>
+                        <label className="block text-sm font-medium text-brand-700 mb-1">Language</label>
+                        <p className="text-brand-700">{book.language}</p>
+                      </div>
+                    )}
+                    {book.publisher && (
+                      <div>
+                        <label className="block text-sm font-medium text-brand-700 mb-1">Publisher</label>
+                        <p className="text-brand-700">{book.publisher}</p>
+                      </div>
+                    )}
+                    {book.publishDate && (
+                      <div>
+                        <label className="block text-sm font-medium text-brand-700 mb-1">Publish Date</label>
+                        <p className="text-brand-700">{book.publishDate}</p>
+                      </div>
+                    )}
+                    {book.isbn && (
+                      <div>
+                        <label className="block text-sm font-medium text-brand-700 mb-1">ISBN</label>
+                        <p className="text-brand-700 font-mono text-sm">{book.isbn}</p>
+                      </div>
+                    )}
+                    {book.rating && (
+                      <div>
+                        <label className="block text-sm font-medium text-brand-700 mb-1">Rating</label>
+                        <p className="text-brand-700">{book.rating}/5 ({book.reviews || 0} reviews)</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {(book.description || book.fullDescription) && (
+                  <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                    <h2 className="text-xl font-serif text-brand-900 mb-4">Descriptions</h2>
+                    <div className="space-y-4">
+                      {book.description && (
+                        <div>
+                          <label className="block text-sm font-medium text-brand-700 mb-2">Short Description</label>
+                          <p className="text-brand-700 leading-relaxed">{book.description}</p>
+                        </div>
+                      )}
+                      {book.fullDescription && (
+                        <div>
+                          <label className="block text-sm font-medium text-brand-700 mb-2">Full Description</label>
+                          <p className="text-brand-700 leading-relaxed">{book.fullDescription}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 <div className="bg-white border border-brand-200 rounded-2xl p-6">
                   <h2 className="text-xl font-serif text-brand-900 mb-4">Sales Statistics</h2>

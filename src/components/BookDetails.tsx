@@ -5,26 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useCart } from '@/contexts/CartContext'
 import { formatCurrency } from '@/utils/currency'
 
-interface Book {
-  _id: string
-  title: string
-  author: string
-  genre?: string
-  description: string
-  fullDescription?: string
-  year?: string
-  pages?: number
-  status: string
-  isbn?: string
-  language?: string
-  readingTime?: string
-  publisher?: string
-  publishDate?: string
-  price: number
-  coverImageUrl: string
-  rating?: number
-  reviews?: number
-}
+import { Book } from '@/types/uniformData'
 
 interface BookDetailsProps {
   book: Book
@@ -103,6 +84,57 @@ export function BookDetails({ book }: BookDetailsProps) {
           </button>
         </div>
       </div>
+
+      {/* Additional Book Information */}
+      {(book.pages || book.year || book.readingTime || book.publisher || book.isbn) && (
+        <div className="space-y-4">
+          <h4 className="text-lg font-semibold text-navy">Book Details</h4>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            {book.pages && (
+              <div>
+                <span className="font-medium text-navy">Pages:</span>
+                <span className="ml-2 text-teal">{book.pages}</span>
+              </div>
+            )}
+            {book.year && (
+              <div>
+                <span className="font-medium text-navy">Year:</span>
+                <span className="ml-2 text-teal">{book.year}</span>
+              </div>
+            )}
+            {book.readingTime && (
+              <div>
+                <span className="font-medium text-navy">Reading Time:</span>
+                <span className="ml-2 text-teal">{book.readingTime}</span>
+              </div>
+            )}
+            {book.publisher && (
+              <div>
+                <span className="font-medium text-navy">Publisher:</span>
+                <span className="ml-2 text-teal">{book.publisher}</span>
+              </div>
+            )}
+            {book.isbn && (
+              <div>
+                <span className="font-medium text-navy">ISBN:</span>
+                <span className="ml-2 text-teal">{book.isbn}</span>
+              </div>
+            )}
+            {book.language && (
+              <div>
+                <span className="font-medium text-navy">Language:</span>
+                <span className="ml-2 text-teal">{book.language}</span>
+              </div>
+            )}
+            {book.publishDate && (
+              <div>
+                <span className="font-medium text-navy">Publish Date:</span>
+                <span className="ml-2 text-teal">{book.publishDate}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Separator */}
       <div className="w-full h-px bg-gradient-to-r from-transparent via-skyblue to-transparent my-8"></div>

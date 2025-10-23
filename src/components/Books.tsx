@@ -1,19 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { formatCurrency } from '@/utils/currency'
-import { fetchFeaturedBookWithFallback } from '@/utils/apiWithFallback'
 import { getFallbackData } from '@/data/fallbackData'
 import { Book } from '@/types/uniformData'
 
-
 export function Books() {
-  const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
-  const { ref: bookCardRef, isVisible: bookCardVisible } = useScrollAnimation()
-  const { ref: bookImageRef, isVisible: bookImageVisible } = useScrollAnimation()
-  const { ref: bookDetailsRef, isVisible: bookDetailsVisible } = useScrollAnimation()
-  const { ref: buttonsRef, isVisible: buttonsVisible } = useScrollAnimation()
+  const [titleVisible, setTitleVisible] = useState(false)
+  const [bookVisible, setBookVisible] = useState(false)
 
   const [book, setBook] = useState<Book | null>(null)
   const [loading, setLoading] = useState(true)
@@ -32,13 +26,25 @@ export function Books() {
         console.error('Error fetching featured book:', err)
         setError('Failed to load featured book - showing fallback data')
         // Use fallback data
-        setBook(getFallbackData('featured-book') as Book)
+        const fallbackData = getFallbackData('featured-book') as Book
+        setBook(fallbackData)
       } finally {
         setLoading(false)
       }
     }
 
     fetchFeaturedBook()
+  }, [])
+
+  useEffect(() => {
+    // Simple animation triggers
+    const timer1 = setTimeout(() => setTitleVisible(true), 100)
+    const timer2 = setTimeout(() => setBookVisible(true), 300)
+    
+    return () => {
+      clearTimeout(timer1)
+      clearTimeout(timer2)
+    }
   }, [])
 
   if (loading) {
@@ -76,10 +82,7 @@ export function Books() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div 
-          ref={titleRef}
-          className={`text-center mb-16 scroll-animate ${titleVisible ? 'animate-in' : ''}`}
-        >
+        <div className={`text-center mb-16 transition-all duration-1000 ${titleVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <h2 className="text-mobile-4xl md:text-5xl lg:text-6xl font-bold text-brand-900 mb-6 font-jost">
             Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-brand-600">Book</span>
           </h2>
@@ -98,17 +101,12 @@ export function Books() {
         )}
 
         {/* Single Featured Book Display */}
-        <div className="max-w-4xl mx-auto">
-          <div 
-            ref={bookCardRef}
-            className={`bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-12 shadow-2xl scroll-animate ${bookCardVisible ? 'animate-in' : ''}`}
-          >
+        {book && (
+          <div className="max-w-4xl mx-auto">
+            <div className={`bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-3xl p-12 shadow-2xl transition-all duration-1000 ${bookVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Book Cover/Visual */}
-              <div 
-                ref={bookImageRef}
-                className={`text-center lg:text-left scroll-animate-scale scroll-animate-delay-200 ${bookImageVisible ? 'animate-in' : ''}`}
-              >
+              <div className="text-center lg:text-left">
                 <div className="relative inline-block group">
                   {/* Elegant book frame */}
                   <div className="absolute -inset-8 bg-gradient-to-br from-brand-200 via-brand-300 to-brand-400 rounded-3xl opacity-60 group-hover:opacity-80 transition-opacity duration-500"></div>
@@ -128,10 +126,7 @@ export function Books() {
               </div>
 
               {/* Book Details */}
-              <div 
-                ref={bookDetailsRef}
-                className={`space-y-8 scroll-animate-left scroll-animate-delay-300 ${bookDetailsVisible ? 'animate-in' : ''}`}
-              >
+              <div className="space-y-8">
                 <div>
                   <h3 className="text-4xl font-serif text-brand-900 mb-4">{book.title}</h3>
                   <p className="text-lg text-brand-600 mb-4">by {book.author}</p>
@@ -205,10 +200,7 @@ export function Books() {
                 </div>
 
                 {/* Action Buttons */}
-                <div 
-                  ref={buttonsRef}
-                  className={`space-y-4 scroll-animate scroll-animate-delay-500 ${buttonsVisible ? 'animate-in' : ''}`}
-                >
+                <div className="space-y-4">
                   <a href={`/book/${book._id}`} className="block w-full text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:scale-105 bg-gradient-to-r from-brand-500 to-brand-600 text-center">
                     Buy Now - {formatCurrency(book.price)}
                   </a>
@@ -220,6 +212,7 @@ export function Books() {
             </div>
           </div>
         </div>
+        )}
       </div>
     </section>
   )
