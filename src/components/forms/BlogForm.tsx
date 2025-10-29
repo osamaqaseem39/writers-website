@@ -95,6 +95,18 @@ export default function BlogForm({ post, onSubmit, onCancel, isLoading = false }
 
   return (
     <div className="bg-white border border-brand-200 rounded-2xl p-8">
+      <div className="mb-4 flex items-center">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="text-brand-600 hover:text-brand-700 flex items-center space-x-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span>Back</span>
+        </button>
+      </div>
       <h2 className="text-2xl font-serif text-brand-900 mb-6">
         {post ? 'Edit Blog Post' : 'Add New Blog Post'}
       </h2>
