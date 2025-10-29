@@ -69,7 +69,7 @@ export function BlogPageClient({ initialPosts }: BlogPageClientProps) {
                     <span>{Math.max(1, Math.round((featured.content.length || 0) / 800))} min read</span>
                   </div>
                   <a
-                    href="#"
+                    href={`/blog/${featured._id}`}
                     className="inline-block text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-brand-500 to-brand-600"
                   >
                     Read Full Article
@@ -107,7 +107,7 @@ export function BlogPageClient({ initialPosts }: BlogPageClientProps) {
               </div>
               <div className="text-center">
                 <a
-                  href="#"
+                  href={`/blog/${post._id}`}
                   className="w-full inline-block text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-brand-500 to-brand-600"
                 >
                   Read More
@@ -116,6 +116,12 @@ export function BlogPageClient({ initialPosts }: BlogPageClientProps) {
             </div>
           </div>
         ))}
+      </section>
+
+      <section className="text-center mb-12">
+        <a href="/blog" className="border-2 border-brand-300 text-brand-800 hover:bg-brand-50 px-8 py-4 rounded-xl font-semibold backdrop-blur-sm transition-all duration-300 hover:border-brand-400 inline-block">
+          View All Blog Posts
+        </a>
       </section>
     </>
   )

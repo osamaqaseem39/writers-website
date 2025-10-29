@@ -132,7 +132,7 @@ export function Blog({ initialData }: BlogProps) {
                       <span>{blogPosts[0].category || 'Story'}</span>
                     </div>
                     <a 
-                      href={`/blog`}
+                      href={`/blog/${blogPosts[0]._id}`}
                       className="text-white px-6 py-3 rounded-xl font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-brand-500 to-brand-600 inline-block"
                     >
                       Read Full Story
@@ -184,7 +184,7 @@ export function Blog({ initialData }: BlogProps) {
                   {/* Read More Button */}
                   <div className="text-center">
                     <a 
-                      href={`/blog`}
+                      href={`/blog/${post._id}`}
                       className="w-full text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-brand-500 to-brand-600 inline-block"
                     >
                       Read More
@@ -201,9 +201,9 @@ export function Blog({ initialData }: BlogProps) {
           ref={ctaRef}
           className={`text-center scroll-animate scroll-animate-delay-500 ${ctaVisible ? 'animate-in' : ''}`}
         >
-          <button className="border-2 border-brand-300 text-brand-800 hover:bg-brand-50 px-8 py-4 rounded-xl font-semibold text-lg backdrop-blur-sm transition-all duration-300 hover:border-brand-400">
+          <a href="/blog" className="inline-block border-2 border-brand-300 text-brand-800 hover:bg-brand-50 px-8 py-4 rounded-xl font-semibold text-lg backdrop-blur-sm transition-all duration-300 hover:border-brand-400">
             View All Blog Posts
-          </button>
+          </a>
         </div>
       </div>
     </section>
