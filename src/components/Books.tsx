@@ -5,15 +5,25 @@ import { formatCurrency } from '@/utils/currency'
 import { getFallbackData } from '@/data/fallbackData'
 import { Book } from '@/types/uniformData'
 
-export function Books() {
+interface BooksProps {
+  initialData?: Book | null
+}
+
+export function Books({ initialData }: BooksProps) {
   const [titleVisible, setTitleVisible] = useState(false)
   const [bookVisible, setBookVisible] = useState(false)
 
-  const [book, setBook] = useState<Book | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [book, setBook] = useState<Book | null>(initialData || null)
+  const [loading, setLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Only fetch if we don't have initial data
+    if (initialData) {
+      setLoading(false)
+      return
+    }
+
     const fetchFeaturedBook = async () => {
       try {
         const response = await fetch('/api/books/featured')
@@ -34,7 +44,7 @@ export function Books() {
     }
 
     fetchFeaturedBook()
-  }, [])
+  }, [initialData])
 
   useEffect(() => {
     // Simple animation triggers

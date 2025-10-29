@@ -5,17 +5,27 @@ import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { getFallbackData } from '@/data/fallbackData'
 import { BlogPost } from '@/types/uniformData'
 
-export function Blog() {
+interface BlogProps {
+  initialData?: BlogPost[] | null
+}
+
+export function Blog({ initialData }: BlogProps) {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
   const { ref: featuredRef, isVisible: featuredVisible } = useScrollAnimation()
   const { ref: postsRef, isVisible: postsVisible } = useScrollAnimation()
   const { ref: ctaRef, isVisible: ctaVisible } = useScrollAnimation()
 
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
-  const [loading, setLoading] = useState(true)
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(initialData || [])
+  const [loading, setLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Only fetch if we don't have initial data
+    if (initialData) {
+      setLoading(false)
+      return
+    }
+
     const fetchBlogPosts = async () => {
       try {
         const response = await fetch('/api/blog')
@@ -36,7 +46,7 @@ export function Blog() {
     }
 
     fetchBlogPosts()
-  }, [])
+  }, [initialData])
 
   if (loading) {
     return (

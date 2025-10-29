@@ -185,6 +185,11 @@ export default function DashboardPage() {
   const totalSales = books.reduce((sum, book) => sum + (book.sales || 0), 0)
   const pendingReviews = reviews.filter((review: any) => !review.approved).length
   const draftPosts = blogPosts.filter((post: any) => post.status === 'Draft').length
+  
+  // Inventory calculations
+  const lowStockBooks = books.filter((book: any) => book.inventory <= 5 && book.inventory > 0).length
+  const outOfStockBooks = books.filter((book: any) => book.inventory === 0).length
+  const totalInventory = books.reduce((sum, book) => sum + (book.inventory || 0), 0)
 
   // Customer-specific calculations
   const totalOrders = orders.length
@@ -488,6 +493,55 @@ export default function DashboardPage() {
                   </>
                 )}
               </div>
+
+              {/* Inventory Alerts for Admin */}
+              {user?.role === 'admin' && (lowStockBooks > 0 || outOfStockBooks > 0) && (
+                <div className="bg-white border border-brand-200 rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold text-brand-900 mb-4">📦 Inventory Alerts</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className={`p-4 rounded-lg ${outOfStockBooks > 0 ? 'bg-red-50 border border-red-200' : 'bg-gray-50 border border-gray-200'}`}>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-2xl">🚫</span>
+                        <div>
+                          <p className="font-medium text-gray-900">Out of Stock</p>
+                          <p className={`text-2xl font-bold ${outOfStockBooks > 0 ? 'text-red-600' : 'text-gray-500'}`}>
+                            {outOfStockBooks}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className={`p-4 rounded-lg ${lowStockBooks > 0 ? 'bg-yellow-50 border border-yellow-200' : 'bg-gray-50 border border-gray-200'}`}>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-2xl">⚠️</span>
+                        <div>
+                          <p className="font-medium text-gray-900">Low Stock</p>
+                          <p className={`text-2xl font-bold ${lowStockBooks > 0 ? 'text-yellow-600' : 'text-gray-500'}`}>
+                            {lowStockBooks}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4 rounded-lg bg-green-50 border border-green-200">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-2xl">📦</span>
+                        <div>
+                          <p className="font-medium text-gray-900">Total Inventory</p>
+                          <p className="text-2xl font-bold text-green-600">{totalInventory}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {(lowStockBooks > 0 || outOfStockBooks > 0) && (
+                    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <p className="text-sm text-yellow-800">
+                        <strong>Action Required:</strong> {outOfStockBooks > 0 && `${outOfStockBooks} book(s) are out of stock. `}
+                        {lowStockBooks > 0 && `${lowStockBooks} book(s) have low stock. `}
+                        Consider restocking to avoid missed sales.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Recent Activity */}
               <div className="bg-white border border-brand-200 rounded-2xl p-8">

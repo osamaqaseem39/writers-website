@@ -210,6 +210,7 @@ export default function BooksManagementPage() {
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Author</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Genre</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Price</th>
+                          <th className="text-left py-4 px-6 font-medium text-brand-700">Inventory</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Status</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Featured</th>
                           <th className="text-left py-4 px-6 font-medium text-brand-700">Actions</th>
@@ -231,6 +232,27 @@ export default function BooksManagementPage() {
                             <td className="py-4 px-6 text-brand-700">{book.author}</td>
                             <td className="py-4 px-6 text-brand-700">{book.genre || 'N/A'}</td>
                             <td className="py-4 px-6 font-medium text-brand-900">{formatCurrency(book.price)}</td>
+                            <td className="py-4 px-6">
+                              <div className="flex items-center space-x-2">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  book.inventory > 10 
+                                    ? 'bg-green-100 text-green-800' 
+                                    : book.inventory > 5 
+                                      ? 'bg-yellow-100 text-yellow-800'
+                                      : book.inventory > 0
+                                        ? 'bg-red-100 text-red-800'
+                                        : 'bg-gray-100 text-gray-600'
+                                }`}>
+                                  {book.inventory || 0}
+                                </span>
+                                {book.inventory <= 5 && book.inventory > 0 && (
+                                  <span className="text-xs text-red-600">Low Stock</span>
+                                )}
+                                {book.inventory === 0 && (
+                                  <span className="text-xs text-gray-600">Out of Stock</span>
+                                )}
+                              </div>
+                            </td>
                             <td className="py-4 px-6">
                               <span className={`px-3 py-1 rounded-full text-sm ${
                                 book.status === 'Published' 

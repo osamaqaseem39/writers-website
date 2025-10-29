@@ -6,17 +6,25 @@ import { Gallery } from '@/components/Gallery'
 import { Reviews } from '@/components/Reviews'
 import { Blog } from '@/components/Blog'
 import { Contact } from '@/components/Contact'
+import { getServerSideData } from '@/utils/serverData'
 
-export default function Home() {
+export default async function Home() {
+  // Fetch data on the server for better performance
+  const [featuredBook, blogPosts, reviews] = await Promise.all([
+    getServerSideData('featured-book'),
+    getServerSideData('blog'),
+    getServerSideData('reviews')
+  ])
+
   return (
     <>
       <Header />
       <Hero />
       <About />
-      <Books />
+      <Books initialData={featuredBook} />
       <Gallery />
-      <Reviews />
-      <Blog />
+      <Reviews initialData={reviews} />
+      <Blog initialData={blogPosts} />
       <Contact />
     </>
   )

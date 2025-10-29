@@ -1,6 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { getFallbackData } from '@/data/fallbackData'
+import { Review } from '@/types/uniformData'
+
+interface ReviewsProps {
+  initialData?: Review[] | null
+}
 
 interface Review {
   _id: string
@@ -56,22 +62,44 @@ function ReviewCard({ review }: { review: Review }) {
   )
 }
 
-export function Reviews() {
-  const [reviews, setReviews] = useState<Review[]>([])
+export function Reviews({ initialData }: ReviewsProps) {
+  const [reviews, setReviews] = useState<Review[]>(initialData || [])
+  const [loading, setLoading] = useState(!initialData)
+  const [error, setError] = useState<string | null>(null)
+
   useEffect(() => {
+    // Only fetch if we don't have initial data
+    if (initialData) {
+      setLoading(false)
+      return
+    }
+
     let isMounted = true
     const load = async () => {
       try {
         const res = await fetch('/api/reviews', { cache: 'no-store' })
         const data = await res.json()
-        if (isMounted) setReviews(data.reviews || [])
+        if (isMounted) {
+          const apiReviews = data.reviews || []
+          if (apiReviews.length > 0) {
+            setReviews(apiReviews)
+          } else {
+            // Use fallback data if no reviews from API
+            setReviews(getFallbackData('reviews') as Review[])
+            setError('Using sample reviews - backend not available')
+          }
+        }
       } catch {
-        if (isMounted) setReviews([])
+        if (isMounted) {
+          // Use fallback data when API fails
+          setReviews(getFallbackData('reviews') as Review[])
+          setError('Using sample reviews - backend not available')
+        }
       }
     }
     load()
     return () => { isMounted = false }
-  }, [])
+  }, [initialData])
 
   return (
     <section id="reviews" className="py-20 bg-gradient-to-br from-brand-50 via-brand-100 to-brand-200 relative overflow-hidden">
@@ -92,6 +120,13 @@ export function Reviews() {
             <span className="sm:hidden">What readers say about "You Never Cried".</span>
           </p>
           <div className="w-24 h-1 mx-auto rounded-full mt-6 bg-gradient-to-r from-brand-500 to-brand-600"></div>
+          
+          {/* Error message */}
+          {error && (
+            <div className="mt-4 p-4 bg-yellow-100 border border-yellow-400 rounded-lg text-yellow-800">
+              {error}
+            </div>
+          )}
         </div>
 
         {/* Reviews Grid */}
