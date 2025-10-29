@@ -55,3 +55,59 @@ export async function GET(
     return NextResponse.json({ book: mockBook })
   }
 }
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+  const body = await request.json()
+  const auth = request.headers.get('authorization') || ''
+  
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/books/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(auth ? { Authorization: auth } : {})
+      },
+      body: JSON.stringify(body)
+    })
+
+    const data = await response.json()
+    return NextResponse.json(data, { status: response.status })
+  } catch (error) {
+    console.error('Error updating book:', error)
+    return NextResponse.json(
+      { error: 'Failed to update book' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
+  const auth = request.headers.get('authorization') || ''
+  
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/books/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(auth ? { Authorization: auth } : {})
+      }
+    })
+
+    const data = await response.json()
+    return NextResponse.json(data, { status: response.status })
+  } catch (error) {
+    console.error('Error deleting book:', error)
+    return NextResponse.json(
+      { error: 'Failed to delete book' },
+      { status: 500 }
+    )
+  }
+}
