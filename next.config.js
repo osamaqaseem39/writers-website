@@ -20,6 +20,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
+  
   // Headers for better caching
   async headers() {
     return [
