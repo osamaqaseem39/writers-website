@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { formatCurrency } from '@/utils/currency'
 
 interface CartItem {
-  id: number
+  id: string
   title: string
   author: string
   price: number
@@ -17,13 +17,25 @@ interface CartItem {
   coverImage: string
 }
 
+// Calculate shipping charges based on country
+function calculateShippingCharges(country: string, subtotal: number): number {
+  // Pakistan: Free shipping for orders above 2500, otherwise 500
+  if (country === 'PK' || country === 'Pakistan') {
+    return subtotal > 2500 ? 0 : 500
+  }
+  // International: Add shipping charges (2000 PKR)
+  return country ? 2000 : 0
+}
+
 export default function CheckoutPage() {
   const router = useRouter()
   const { cartItems, updateQuantity, removeFromCart, clearCart } = useCart()
-  const { autoRegister, user } = useAuth()
+  const { autoRegister, user, token } = useAuth()
   const [step, setStep] = useState(1)
   const [isAutoRegistering, setIsAutoRegistering] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [autoRegisterMessage, setAutoRegisterMessage] = useState('')
+  const [submitError, setSubmitError] = useState('')
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -34,16 +46,11 @@ export default function CheckoutPage() {
     zipCode: '',
     country: '',
     phone: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    nameOnCard: ''
   })
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-  const shipping = subtotal > 2500 ? 0 : 500
-  const tax = subtotal * 0.08
-  const total = subtotal + shipping + tax
+  const shipping = calculateShippingCharges(formData.country, subtotal)
+  const total = subtotal + shipping
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -81,11 +88,9 @@ export default function CheckoutPage() {
         } finally {
           setIsAutoRegistering(false)
         }
-      } else if (step < 3) {
+      } else if (step < 2) {
         setStep(step + 1)
       }
-    } else if (step < 3) {
-      setStep(step + 1)
     }
   }
 
@@ -93,12 +98,72 @@ export default function CheckoutPage() {
     if (step > 1) setStep(step - 1)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Process payment logic here
-    console.log('Order submitted:', formData)
-    clearCart() // Clear cart after successful order
-    router.push('/order-confirmation')
+    setIsSubmitting(true)
+    setSubmitError('')
+
+    try {
+      // Prepare order items
+      const orderItems = cartItems.map(item => ({
+        book: item.id,
+        title: item.title,
+        price: item.price,
+        quantity: item.quantity
+      }))
+
+      // Prepare order data
+      const orderData = {
+        items: orderItems,
+        totalAmount: total,
+        shippingCharges: shipping,
+        paymentMethod: 'COD',
+        shippingAddress: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          zipCode: formData.zipCode,
+          country: formData.country,
+        }
+      }
+
+      // Get auth token
+      const authToken = token || localStorage.getItem('token')
+      
+      if (!authToken) {
+        setSubmitError('Authentication required. Please try again.')
+        return
+      }
+
+      // Create order
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(orderData)
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to create order')
+      }
+
+      // Clear cart and redirect
+      clearCart()
+      router.push(`/order-confirmation?orderId=${data.order._id}`)
+    } catch (error: any) {
+      console.error('Error creating order:', error)
+      setSubmitError(error.message || 'Failed to create order. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -110,7 +175,7 @@ export default function CheckoutPage() {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-serif text-brand-900 mb-4">Checkout</h1>
             <div className="flex justify-center space-x-4">
-              {[1, 2, 3].map((stepNumber) => (
+              {[1, 2].map((stepNumber) => (
                 <div key={stepNumber} className="flex items-center">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                     step >= stepNumber 
@@ -119,7 +184,7 @@ export default function CheckoutPage() {
                   }`}>
                     {stepNumber}
                   </div>
-                  {stepNumber < 3 && (
+                  {stepNumber < 2 && (
                     <div className={`w-16 h-1 mx-2 ${
                       step > stepNumber ? 'bg-brand-500' : 'bg-brand-200'
                     }`} />
@@ -129,8 +194,7 @@ export default function CheckoutPage() {
             </div>
             <div className="flex justify-center space-x-16 mt-4">
               <span className={`text-sm ${step >= 1 ? 'text-brand-600' : 'text-brand-400'}`}>Shipping</span>
-              <span className={`text-sm ${step >= 2 ? 'text-brand-600' : 'text-brand-400'}`}>Payment</span>
-              <span className={`text-sm ${step >= 3 ? 'text-brand-600' : 'text-brand-400'}`}>Review</span>
+              <span className={`text-sm ${step >= 2 ? 'text-brand-600' : 'text-brand-400'}`}>Review</span>
             </div>
             
             {/* Auto-registration message */}
@@ -281,76 +345,32 @@ export default function CheckoutPage() {
                           required
                         >
                           <option value="">Select Country</option>
+                          <option value="PK">Pakistan</option>
                           <option value="US">United States</option>
                           <option value="CA">Canada</option>
                           <option value="UK">United Kingdom</option>
                           <option value="AU">Australia</option>
+                          <option value="IN">India</option>
+                          <option value="AE">United Arab Emirates</option>
+                          <option value="SA">Saudi Arabia</option>
+                          <option value="GB">United Kingdom</option>
                         </select>
+                        {formData.country && (
+                          <p className="text-sm text-brand-600 mt-2">
+                            {formData.country === 'PK' || formData.country === 'Pakistan' 
+                              ? (subtotal > 2500 
+                                  ? 'Free shipping for orders above 2500 PKR' 
+                                  : 'Shipping charges: 500 PKR')
+                              : 'International shipping charges: 2000 PKR (will be added at checkout)'}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* Step 2: Payment Information */}
+                {/* Step 2: Review Order */}
                 {step === 2 && (
-                  <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-8">
-                    <h2 className="text-2xl font-serif text-brand-900 mb-6">Payment Information</h2>
-                    <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium text-brand-700 mb-2">Name on Card</label>
-                        <input
-                          type="text"
-                          name="nameOnCard"
-                          value={formData.nameOnCard}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-brand-700 mb-2">Card Number</label>
-                        <input
-                          type="text"
-                          name="cardNumber"
-                          value={formData.cardNumber}
-                          onChange={handleInputChange}
-                          placeholder="1234 5678 9012 3456"
-                          className="w-full px-4 py-3 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-                          required
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-brand-700 mb-2">Expiry Date</label>
-                          <input
-                            type="text"
-                            name="expiryDate"
-                            value={formData.expiryDate}
-                            onChange={handleInputChange}
-                            placeholder="MM/YY"
-                            className="w-full px-4 py-3 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-                            required
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-brand-700 mb-2">CVV</label>
-                          <input
-                            type="text"
-                            name="cvv"
-                            value={formData.cvv}
-                            onChange={handleInputChange}
-                            placeholder="123"
-                            className="w-full px-4 py-3 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Step 3: Review Order */}
-                {step === 3 && (
                   <div className="bg-white/80 backdrop-blur-sm border border-brand-200/50 rounded-2xl p-8">
                     <h2 className="text-2xl font-serif text-brand-900 mb-6">Review Your Order</h2>
                     <div className="space-y-6">
@@ -365,11 +385,29 @@ export default function CheckoutPage() {
                       </div>
                       <div>
                         <h3 className="text-lg font-semibold text-brand-800 mb-3">Payment Method</h3>
-                        <p className="text-brand-700">
-                          **** **** **** {formData.cardNumber.slice(-4)}<br />
-                          Expires: {formData.expiryDate}
-                        </p>
+                        <div className="bg-brand-50 border border-brand-200 rounded-lg p-4">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-12 h-12 bg-brand-500 rounded-full flex items-center justify-center">
+                              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                              </svg>
+                            </div>
+                            <div>
+                              <p className="font-semibold text-brand-900">Cash on Delivery (COD)</p>
+                              <p className="text-sm text-brand-600">
+                                {formData.country === 'PK' || formData.country === 'Pakistan'
+                                  ? 'Pay when you receive your order'
+                                  : 'Pay when you receive your order (International orders may have additional charges)'}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                      {submitError && (
+                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                          {submitError}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -384,7 +422,7 @@ export default function CheckoutPage() {
                   >
                     Previous
                   </button>
-                  {step < 3 ? (
+                  {step < 2 ? (
                     <button
                       type="button"
                       onClick={handleNext}
@@ -401,15 +439,25 @@ export default function CheckoutPage() {
                           <span>Creating Account...</span>
                         </>
                       ) : (
-                        <span>Next</span>
+                        <span>Review Order</span>
                       )}
                     </button>
                   ) : (
                     <button
                       type="submit"
-                      className="px-8 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white rounded-lg hover:from-brand-600 hover:to-brand-700 transition-all duration-300 shadow-lg"
+                      disabled={isSubmitting}
+                      className={`px-8 py-3 bg-gradient-to-r from-brand-500 to-brand-600 text-white rounded-lg hover:from-brand-600 hover:to-brand-700 transition-all duration-300 shadow-lg flex items-center space-x-2 ${
+                        isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                     >
-                      Place Order
+                      {isSubmitting ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                          <span>Placing Order...</span>
+                        </>
+                      ) : (
+                        <span>Place Order</span>
+                      )}
                     </button>
                   )}
                 </div>
@@ -480,16 +528,31 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-brand-700">
                     <span>Shipping</span>
-                    <span>{shipping === 0 ? 'Free' : formatCurrency(shipping)}</span>
-                  </div>
-                  <div className="flex justify-between text-brand-700">
-                    <span>Tax</span>
-                    <span>{formatCurrency(tax)}</span>
+                    <span>
+                      {shipping === 0 ? 'Free' : formatCurrency(shipping)}
+                      {formData.country && formData.country !== 'PK' && formData.country !== 'Pakistan' && (
+                        <span className="text-xs text-brand-500 block">(International)</span>
+                      )}
+                    </span>
                   </div>
                   <div className="flex justify-between text-lg font-semibold text-brand-900 border-t border-brand-200 pt-3">
                     <span>Total</span>
                     <span>{formatCurrency(total)}</span>
                   </div>
+                  {formData.country && formData.country !== 'PK' && formData.country !== 'Pakistan' && (
+                    <p className="text-xs text-brand-600 mt-2">
+                      * International shipping charges included
+                    </p>
+                  )}
+                  {formData.country === 'PK' || formData.country === 'Pakistan' ? (
+                    <p className="text-xs text-brand-600 mt-2">
+                      * Cash on Delivery available
+                    </p>
+                  ) : (
+                    <p className="text-xs text-brand-600 mt-2">
+                      * Cash on Delivery available (charges apply for international)
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
