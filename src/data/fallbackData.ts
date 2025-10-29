@@ -360,6 +360,83 @@ export const fallbackGalleryImages: GalleryImage[] = [
     order: 3,
     createdAt: "2024-01-12T09:00:00Z",
     updatedAt: "2024-01-12T09:00:00Z"
+  },
+  {
+    _id: "fallback-gallery-4",
+    title: "Author Reading",
+    description: "Reading excerpts from 'You Never Cried' at a local bookstore",
+    src: "/gallery4.jpeg",
+    status: "Published",
+    alt: "Author reading",
+    order: 4,
+    createdAt: "2024-01-10T14:00:00Z",
+    updatedAt: "2024-01-10T14:00:00Z"
+  },
+  {
+    _id: "fallback-gallery-5",
+    title: "Book Launch Event",
+    description: "Celebrating the launch of 'You Never Cried' with friends and family",
+    src: "/gallery5.jpeg",
+    status: "Published",
+    alt: "Book launch event",
+    order: 5,
+    createdAt: "2024-01-08T18:00:00Z",
+    updatedAt: "2024-01-08T18:00:00Z"
+  },
+  {
+    _id: "fallback-gallery-6",
+    title: "Writing Process",
+    description: "Behind the scenes of the writing process for the novel",
+    src: "/gallery6.jpeg",
+    status: "Published",
+    alt: "Writing process",
+    order: 6,
+    createdAt: "2024-01-05T10:00:00Z",
+    updatedAt: "2024-01-05T10:00:00Z"
+  },
+  {
+    _id: "fallback-gallery-7",
+    title: "Author Interview",
+    description: "Giving an interview about the inspiration behind the book",
+    src: "/gallery7.jpeg",
+    status: "Published",
+    alt: "Author interview",
+    order: 7,
+    createdAt: "2024-01-03T15:00:00Z",
+    updatedAt: "2024-01-03T15:00:00Z"
+  },
+  {
+    _id: "fallback-gallery-8",
+    title: "Bookstore Visit",
+    description: "Visiting local bookstores to see the book on display",
+    src: "/gallery8.jpeg",
+    status: "Published",
+    alt: "Bookstore visit",
+    order: 8,
+    createdAt: "2024-01-01T12:00:00Z",
+    updatedAt: "2024-01-01T12:00:00Z"
+  },
+  {
+    _id: "fallback-gallery-9",
+    title: "Reader Meetup",
+    description: "Meeting with readers who shared their thoughts on the book",
+    src: "/gallery9.jpeg",
+    status: "Published",
+    alt: "Reader meetup",
+    order: 9,
+    createdAt: "2023-12-28T16:00:00Z",
+    updatedAt: "2023-12-28T16:00:00Z"
+  },
+  {
+    _id: "fallback-gallery-10",
+    title: "Gallery Collection",
+    description: "A collection of memorable moments from the book journey",
+    src: "/gallery.jpeg",
+    status: "Published",
+    alt: "Gallery collection",
+    order: 10,
+    createdAt: "2023-12-25T11:00:00Z",
+    updatedAt: "2023-12-25T11:00:00Z"
   }
 ]
 
