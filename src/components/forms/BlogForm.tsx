@@ -11,6 +11,7 @@ interface BlogFormProps {
     category?: string
     imageUrl?: string
     published?: boolean
+    status?: string
   }
   onSubmit: (data: any) => Promise<void>
   onCancel: () => void
@@ -18,12 +19,19 @@ interface BlogFormProps {
 }
 
 export default function BlogForm({ post, onSubmit, onCancel, isLoading = false }: BlogFormProps) {
+  // Determine published status from either published boolean or status string
+  const getPublishedStatus = () => {
+    if (post?.published !== undefined) return post.published
+    if (post?.status) return post.status === 'Published'
+    return true
+  }
+  
   const [formData, setFormData] = useState({
     title: post?.title || '',
     content: post?.content || '',
     category: post?.category || 'General',
     imageUrl: post?.imageUrl || '',
-    published: post?.published ?? true
+    published: getPublishedStatus()
   })
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)

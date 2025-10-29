@@ -36,6 +36,11 @@ export async function getServerSideData(type: 'featured-book' | 'books' | 'blog'
       }
     })
 
+    // Handle 404 gracefully - it might mean no featured book is set
+    if (response.status === 404 && type === 'featured-book') {
+      return getFallbackData('featured-book')
+    }
+
     if (!response.ok) {
       throw new Error(`Backend API responded with status: ${response.status}`)
     }
@@ -49,7 +54,11 @@ export async function getServerSideData(type: 'featured-book' | 'books' | 'blog'
       case 'books':
         return data.books?.length > 0 ? data.books : getFallbackData('books')
       case 'blog':
-        return data.posts?.length > 0 ? data.posts : getFallbackData('blog')
+        // If posts array is empty, return fallback data
+        if (!data.posts || data.posts.length === 0) {
+          return getFallbackData('blog')
+        }
+        return data.posts
       case 'reviews':
         return data.reviews?.length > 0 ? data.reviews : getFallbackData('reviews')
       case 'gallery':
@@ -111,7 +120,11 @@ export async function getClientSideData(type: 'featured-book' | 'books' | 'blog'
       case 'books':
         return data.books?.length > 0 ? data.books : getFallbackData('books')
       case 'blog':
-        return data.posts?.length > 0 ? data.posts : getFallbackData('blog')
+        // If posts array is empty, return fallback data
+        if (!data.posts || data.posts.length === 0) {
+          return getFallbackData('blog')
+        }
+        return data.posts
       case 'reviews':
         return data.reviews?.length > 0 ? data.reviews : getFallbackData('reviews')
       case 'gallery':

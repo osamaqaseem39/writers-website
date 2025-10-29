@@ -13,7 +13,8 @@ interface BlogPost {
   content: string
   category?: string
   imageUrl?: string
-  published: boolean
+  published?: boolean
+  status?: string
   createdAt: string
   views?: number
 }
@@ -38,7 +39,12 @@ export default function BlogManagementPage() {
       setIsLoadingPosts(true)
       const res = await fetch('/api/blog')
       const data = await res.json()
-      setPosts(data.posts || [])
+      // Convert status to published for display compatibility
+      const posts = (data.posts || []).map((post: any) => ({
+        ...post,
+        published: post.status === 'Published' || post.published
+      }))
+      setPosts(posts)
     } catch (error) {
       console.error('Error loading posts:', error)
     } finally {
@@ -94,12 +100,18 @@ export default function BlogManagementPage() {
       const data = await res.json()
       
       if (res.ok) {
+        // Convert status back to published for frontend
+        const updatedPost = data.post ? {
+          ...data.post,
+          published: data.post.status === 'Published' || data.post.published
+        } : null
+        
         if (editingPost) {
           setPosts(prev => prev.map(post => 
-            post._id === editingPost._id ? { ...post, ...formData } : post
+            post._id === editingPost._id ? { ...post, ...updatedPost, ...formData } : post
           ))
         } else {
-          setPosts(prev => [data.post, ...prev])
+          setPosts(prev => [updatedPost || { ...formData, _id: Date.now().toString() }, ...prev])
         }
         setShowForm(false)
         setEditingPost(null)
