@@ -30,7 +30,7 @@ function calculateShippingCharges(country: string, subtotal: number): number {
 export default function CheckoutPage() {
   const router = useRouter()
   const { cartItems, updateQuantity, removeFromCart, clearCart } = useCart()
-  const { autoRegister, user, token } = useAuth()
+  const { autoRegister, user } = useAuth()
   const [step, setStep] = useState(1)
   const [isAutoRegistering, setIsAutoRegistering] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -103,6 +103,13 @@ export default function CheckoutPage() {
     setIsSubmitting(true)
     setSubmitError('')
 
+    // Validate cart is not empty
+    if (cartItems.length === 0) {
+      setSubmitError('Your cart is empty. Please add items before placing an order.')
+      setIsSubmitting(false)
+      return
+    }
+
     try {
       // Prepare order items
       const orderItems = cartItems.map(item => ({
@@ -131,8 +138,8 @@ export default function CheckoutPage() {
         }
       }
 
-      // Get auth token
-      const authToken = token || localStorage.getItem('token')
+      // Get auth token from localStorage
+      const authToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null
       
       if (!authToken) {
         setSubmitError('Authentication required. Please try again.')
