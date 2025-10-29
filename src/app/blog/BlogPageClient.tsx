@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react'
 import { BlogPost } from '@/types/uniformData'
+import { markdownToPlainText } from '@/components/Markdown'
 
 interface BlogPageClientProps {
   initialPosts: BlogPost[]
@@ -62,7 +63,7 @@ export function BlogPageClient({ initialPosts }: BlogPageClientProps) {
                   <h2 className="text-3xl font-bold text-brand-900 mb-4 group-hover:text-brand-700 transition-colors duration-300">
                     {featured.title}
                   </h2>
-                  <p className="text-brand-800 text-lg leading-relaxed mb-6">{featured.content.slice(0, 160)}...</p>
+                  <p className="text-brand-800 text-lg leading-relaxed mb-6">{markdownToPlainText(featured.content, 160)}</p>
                   <div className="flex items-center justify-between text-sm text-brand-600 mb-6">
                     <span>{new Date(featured.createdAt).toDateString()}</span>
                     <span>{Math.max(1, Math.round((featured.content.length || 0) / 800))} min read</span>
@@ -98,7 +99,7 @@ export function BlogPageClient({ initialPosts }: BlogPageClientProps) {
                 <h3 className="text-xl font-bold text-brand-900 mb-3 group-hover:text-brand-700 transition-colors duration-300">
                   {post.title}
                 </h3>
-                <p className="text-brand-800 text-sm leading-relaxed mb-4">{post.content.slice(0, 120)}...</p>
+                <p className="text-brand-800 text-sm leading-relaxed mb-4">{markdownToPlainText(post.content, 120)}</p>
                 <div className="flex items-center justify-between text-sm text-brand-600 mb-4">
                   <span>{new Date(post.createdAt).toDateString()}</span>
                   <span>{Math.max(1, Math.round((post.content.length || 0) / 800))} min read</span>

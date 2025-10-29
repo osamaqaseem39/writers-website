@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import Markdown, { markdownToPlainText } from '@/components/Markdown'
 
 interface BlogFormProps {
   post?: {
@@ -26,6 +27,38 @@ export default function BlogForm({ post, onSubmit, onCancel, isLoading = false }
   })
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+
+  const applyWrap = (before: string, after: string = before) => {
+    const el = textareaRef.current
+    if (!el) return
+    const start = el.selectionStart || 0
+    const end = el.selectionEnd || 0
+    const value = formData.content
+    const selected = value.slice(start, end)
+    const next = value.slice(0, start) + before + selected + after + value.slice(end)
+    setFormData({ ...formData, content: next })
+    requestAnimationFrame(() => {
+      el.focus()
+      const cursor = start + before.length + selected.length + after.length
+      el.setSelectionRange(cursor, cursor)
+    })
+  }
+
+  const insertAtCursor = (snippet: string) => {
+    const el = textareaRef.current
+    if (!el) return
+    const start = el.selectionStart || 0
+    const end = el.selectionEnd || 0
+    const value = formData.content
+    const next = value.slice(0, start) + snippet + value.slice(end)
+    setFormData({ ...formData, content: next })
+    requestAnimationFrame(() => {
+      el.focus()
+      const cursor = start + snippet.length
+      el.setSelectionRange(cursor, cursor)
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -111,16 +144,34 @@ export default function BlogForm({ post, onSubmit, onCancel, isLoading = false }
 
         <div>
           <label className="block text-sm font-medium text-brand-700 mb-2">
-            Content *
+            Content (Markdown) *
           </label>
+          <div className="flex flex-wrap gap-2 mb-3">
+            <button type="button" onClick={() => applyWrap('**')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">Bold</button>
+            <button type="button" onClick={() => applyWrap('*')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">Italic</button>
+            <button type="button" onClick={() => applyWrap('~~')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">Strike</button>
+            <button type="button" onClick={() => insertAtCursor('\n# ')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">H1</button>
+            <button type="button" onClick={() => insertAtCursor('\n## ')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">H2</button>
+            <button type="button" onClick={() => insertAtCursor('\n- ')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">List</button>
+            <button type="button" onClick={() => insertAtCursor('\n> ')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">Quote</button>
+            <button type="button" onClick={() => applyWrap('`')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">Code</button>
+            <button type="button" onClick={() => applyWrap('[', '](https://)')} className="px-3 py-1 text-sm border border-brand-200 rounded bg-white hover:bg-brand-50">Link</button>
+          </div>
           <textarea
+            ref={textareaRef}
             value={formData.content}
             onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            rows={10}
-            className="w-full border border-brand-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-            placeholder="Write your blog post content here..."
+            rows={12}
+            className="w-full border border-brand-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 font-mono"
+            placeholder="Write your blog post in Markdown..."
             required
           />
+          <div className="mt-4">
+            <div className="text-sm text-brand-600 mb-2">Preview</div>
+            <div className="prose max-w-none prose-headings:font-serif prose-p:leading-7">
+              <Markdown markdown={formData.content} />
+            </div>
+          </div>
         </div>
 
         <div>
