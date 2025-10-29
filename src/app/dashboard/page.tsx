@@ -30,6 +30,7 @@ interface Order {
   totalAmount: number
   status: string
   createdAt: string
+  paymentStatus?: 'Unpaid' | 'Paid' | 'Refunded'
 }
 
 export default function DashboardPage() {
@@ -61,10 +62,10 @@ export default function DashboardPage() {
 
   // Authentication is now handled by ProtectedRoute component
 
-  // Load customer orders
+  // Load orders (for customers: their own; for admin: all)
   useEffect(() => {
     const loadOrders = async () => {
-      if (user && user?.role !== 'admin') {
+      if (user) {
         setIsLoadingOrders(true)
         try {
           const token = localStorage.getItem('token')
@@ -87,8 +88,8 @@ export default function DashboardPage() {
       }
     }
     
-    // Only load orders if user is available and not admin
-    if (user && user?.role !== 'admin') {
+    // Load when user available
+    if (user) {
       loadOrders()
     }
   }, [user])
@@ -544,14 +545,159 @@ export default function DashboardPage() {
               )}
 
               {/* Recent Activity */}
-              <div className="bg-white border border-brand-200 rounded-2xl p-8">
-                <h3 className="text-xl font-serif text-brand-900 mb-6">Recent Activity</h3>
-                <div className="text-brand-600">
-                  {user?.role === 'admin' 
-                    ? 'No recent activity.' 
-                    : 'Welcome! Start by browsing our books or creating an account.'
-                  }
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="bg-white border border-brand-200 rounded-2xl p-8">
+                  <h3 className="text-xl font-serif text-brand-900 mb-6">Recent Activity</h3>
+                  <div className="text-brand-600">
+                    {user?.role === 'admin' 
+                      ? 'Manage your store and monitor orders.' 
+                      : 'Welcome! Start by browsing our books or creating an account.'
+                    }
+                  </div>
                 </div>
+
+                {user?.role === 'admin' && (
+                  <div className="bg-white border border-brand-200 rounded-2xl p-8">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-serif text-brand-900">Recent Orders</h3>
+                      <a href="/dashboard?tab=orders" className="text-sm text-brand-600 hover:text-brand-800">View all</a>
+                    </div>
+                    {isLoadingOrders ? (
+                      <div className="text-brand-600">Loading...</div>
+                    ) : orders.length === 0 ? (
+                      <div className="text-brand-600">No orders yet.</div>
+                    ) : (
+                      <div className="space-y-3">
+                        {orders.slice(0, 5).map((o) => (
+                          <div key={o._id} className="flex items-center justify-between py-2 border-b border-brand-100 last:border-0">
+                            <div>
+                              <p className="text-sm text-brand-600">Order #{o._id.slice(-6)} • {new Date(o.createdAt).toLocaleDateString()}</p>
+                              <p className="text-brand-900 font-medium">{formatCurrency(o.totalAmount)}</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {o.paymentStatus && (
+                                <span className={`px-2 py-1 rounded-full text-xs ${
+                                  o.paymentStatus === 'Paid' ? 'bg-green-100 text-green-800' :
+                                  o.paymentStatus === 'Refunded' ? 'bg-gray-100 text-gray-800' :
+                                  'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                  {o.paymentStatus}
+                                </span>
+                              )}
+                              <span className={`px-2 py-1 rounded-full text-xs ${
+                                o.status === 'Paid' ? 'bg-green-100 text-green-800' :
+                                o.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
+                                o.status === 'Completed' ? 'bg-purple-100 text-purple-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {o.status}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Quick Lists */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Recent Books */}
+                <div className="bg-white border border-brand-200 rounded-2xl p-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-serif text-brand-900">Recent Books</h3>
+                    <a href="/dashboard/books" className="text-sm text-brand-600 hover:text-brand-800">View all</a>
+                  </div>
+                  {books.length === 0 ? (
+                    <div className="text-brand-600">No books found.</div>
+                  ) : (
+                    <div className="divide-y divide-brand-100">
+                      {books.slice(0, 5).map((b: any) => (
+                        <div key={b.id} className="py-3 flex items-center justify-between">
+                          <div className="min-w-0">
+                            <p className="text-brand-900 font-medium truncate">{b.title}</p>
+                            <p className="text-sm text-brand-600 truncate">by {b.author}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm text-brand-700">{formatCurrency(b.price)}</p>
+                            <span className="text-xs text-brand-600">{b.status}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Recent Blog Posts */}
+                <div className="bg-white border border-brand-200 rounded-2xl p-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-serif text-brand-900">Recent Blog Posts</h3>
+                    <a href="/dashboard/blog" className="text-sm text-brand-600 hover:text-brand-800">View all</a>
+                  </div>
+                  {blogPosts.length === 0 ? (
+                    <div className="text-brand-600">No posts found.</div>
+                  ) : (
+                    <div className="divide-y divide-brand-100">
+                      {blogPosts.slice(0, 5).map((p: any) => (
+                        <div key={p.id} className="py-3 flex items-center justify-between">
+                          <div className="min-w-0">
+                            <p className="text-brand-900 font-medium truncate">{p.title}</p>
+                            <p className="text-sm text-brand-600 truncate">{p.category} • {p.date}</p>
+                          </div>
+                          <span className="text-xs text-brand-600">{p.status}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Recent Gallery Items (Admin only) */}
+                {user?.role === 'admin' && (
+                  <div className="bg-white border border-brand-200 rounded-2xl p-8">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-serif text-brand-900">Recent Gallery Items</h3>
+                      <a href="/dashboard/gallery" className="text-sm text-brand-600 hover:text-brand-800">View all</a>
+                    </div>
+                    {galleryImages.length === 0 ? (
+                      <div className="text-brand-600">No images found.</div>
+                    ) : (
+                      <div className="divide-y divide-brand-100">
+                        {galleryImages.slice(0, 5).map((g: any) => (
+                          <div key={g._id} className="py-3 flex items-center justify-between">
+                            <div className="min-w-0">
+                              <p className="text-brand-900 font-medium truncate">{g.title || 'Untitled'}</p>
+                              <p className="text-sm text-brand-600 truncate">{g.status || 'Published'}</p>
+                            </div>
+                            <img src={g.src || '/gallery.jpeg'} alt={g.title || 'Image'} className="w-12 h-12 object-cover rounded" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Recent Reviews (Admin only) */}
+                {user?.role === 'admin' && (
+                  <div className="bg-white border border-brand-200 rounded-2xl p-8">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-serif text-brand-900">Recent Reviews</h3>
+                      <a href="/dashboard/reviews" className="text-sm text-brand-600 hover:text-brand-800">View all</a>
+                    </div>
+                    {reviews.length === 0 ? (
+                      <div className="text-brand-600">No reviews found.</div>
+                    ) : (
+                      <div className="divide-y divide-brand-100">
+                        {reviews.slice(0, 5).map((r: any) => (
+                          <div key={r._id} className="py-3">
+                            <p className="text-brand-900 font-medium">{r.title || 'Review'}</p>
+                            <p className="text-sm text-brand-600">{r.name || 'Anonymous'} • {r.rating ? `${r.rating}/5` : ''}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -826,16 +972,27 @@ export default function DashboardPage() {
                                 {new Date(order.createdAt).toLocaleDateString()}
                               </p>
                             </div>
-                            <div className="text-right">
+                            <div className="text-right space-y-1">
                               <p className="text-lg font-bold text-brand-900">{formatCurrency(order.totalAmount)}</p>
-                              <span className={`px-2 py-1 rounded-full text-xs ${
-                                order.status === 'Paid' ? 'bg-green-100 text-green-800' :
-                                order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                                order.status === 'Completed' ? 'bg-purple-100 text-purple-800' :
-                                'bg-yellow-100 text-yellow-800'
-                              }`}>
-                                {order.status}
-                              </span>
+                              <div className="flex items-center justify-end gap-2">
+                                <span className={`px-2 py-1 rounded-full text-xs ${
+                                  order.status === 'Paid' ? 'bg-green-100 text-green-800' :
+                                  order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
+                                  order.status === 'Completed' ? 'bg-purple-100 text-purple-800' :
+                                  'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                  {order.status}
+                                </span>
+                                {order.paymentStatus && (
+                                  <span className={`px-2 py-1 rounded-full text-xs ${
+                                    order.paymentStatus === 'Paid' ? 'bg-green-100 text-green-800' :
+                                    order.paymentStatus === 'Refunded' ? 'bg-gray-100 text-gray-800' :
+                                    'bg-yellow-100 text-yellow-800'
+                                  }`}>
+                                    {order.paymentStatus}
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
                           <div className="space-y-3">

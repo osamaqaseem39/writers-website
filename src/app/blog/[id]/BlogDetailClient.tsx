@@ -89,8 +89,9 @@ export function BlogDetailClient({ id }: BlogDetailClientProps) {
             </header>
 
             {post.imageUrl && (
-              <div className="mb-6 rounded-2xl overflow-hidden">
-                <img src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover" />
+              <div className="mb-6 rounded-2xl overflow-hidden relative w-full">
+                <div className="pt-[100%]"></div>
+                <img src={post.imageUrl} alt={post.title} className="absolute inset-0 w-full h-full object-cover" />
               </div>
             )}
 

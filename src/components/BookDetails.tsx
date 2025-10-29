@@ -14,7 +14,7 @@ interface BookDetailsProps {
 export function BookDetails({ book }: BookDetailsProps) {
   const router = useRouter()
   const [quantity, setQuantity] = useState(1)
-  const { addToCart, isInCart } = useCart()
+  const { addToCart, isInCart, updateQuantity } = useCart()
 
   const handleAddToCart = () => {
     addToCart({
@@ -28,7 +28,30 @@ export function BookDetails({ book }: BookDetailsProps) {
   }
 
   const handleBuyNow = () => {
-    router.push('/checkout')
+    // Add book to cart with selected quantity
+    const cartItem = {
+      id: book._id,
+      title: book.title,
+      author: book.author,
+      price: book.price,
+      format: 'hardcover',
+      coverImage: book.coverImageUrl || '/bookhomepage.jpeg'
+    }
+    
+    // Add the item (will add with quantity 1 or increment if already exists)
+    addToCart(cartItem)
+    
+    // If quantity > 1, update to the correct quantity
+    // Using setTimeout to ensure state update happens before navigation
+    if (quantity > 1) {
+      setTimeout(() => {
+        updateQuantity(book._id, quantity)
+        setTimeout(() => router.push('/checkout'), 50)
+      }, 50)
+    } else {
+      // Small delay to ensure cart state is saved to localStorage
+      setTimeout(() => router.push('/checkout'), 50)
+    }
   }
 
   return (
