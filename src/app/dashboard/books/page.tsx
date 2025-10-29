@@ -235,20 +235,20 @@ export default function BooksManagementPage() {
                             <td className="py-4 px-6">
                               <div className="flex items-center space-x-2">
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                  book.inventory > 10 
+                                  (book.inventory || 0) > 10 
                                     ? 'bg-green-100 text-green-800' 
-                                    : book.inventory > 5 
+                                    : (book.inventory || 0) > 5 
                                       ? 'bg-yellow-100 text-yellow-800'
-                                      : book.inventory > 0
+                                      : (book.inventory || 0) > 0
                                         ? 'bg-red-100 text-red-800'
                                         : 'bg-gray-100 text-gray-600'
                                 }`}>
                                   {book.inventory || 0}
                                 </span>
-                                {book.inventory <= 5 && book.inventory > 0 && (
+                                {(book.inventory || 0) <= 5 && (book.inventory || 0) > 0 && (
                                   <span className="text-xs text-red-600">Low Stock</span>
                                 )}
-                                {book.inventory === 0 && (
+                                {(book.inventory || 0) === 0 && (
                                   <span className="text-xs text-gray-600">Out of Stock</span>
                                 )}
                               </div>

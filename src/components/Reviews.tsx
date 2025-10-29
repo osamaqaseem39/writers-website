@@ -2,22 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { getFallbackData } from '@/data/fallbackData'
-import { Review } from '@/types/uniformData'
+import { Review as ReviewType } from '@/types/uniformData'
 
 interface ReviewsProps {
-  initialData?: Review[] | null
+  initialData?: ReviewType[] | null
 }
 
-interface Review {
-  _id: string
-  name: string
-  location?: string
-  rating: number
-  text: string
-  imageUrl?: string
-}
-
-function ReviewCard({ review }: { review: Review }) {
+function ReviewCard({ review }: { review: ReviewType }) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
@@ -39,18 +30,14 @@ function ReviewCard({ review }: { review: Review }) {
         {/* Review Text */}
         <div>
           <div className={`overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-32 overflow-y-auto scrollbar-thin scrollbar-thumb-brand-400 scrollbar-track-brand-100 pr-2' : 'max-h-32'}`}>
-            <p className="text-brand-800 leading-relaxed italic">"{review.text}"</p>
+            <p className="text-brand-800 leading-relaxed italic">"{review.comment}"</p>
           </div>
         </div>
 
         {/* Reviewer Info */}
         <div className="flex items-center mt-6">
           <div className="w-12 h-12 rounded-full overflow-hidden mr-4 bg-brand-100 border border-brand-200">
-            {review.imageUrl ? (
-              <img src={review.imageUrl} alt={review.name} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-2xl">👤</div>
-            )}
+            <div className="w-full h-full flex items-center justify-center text-2xl">👤</div>
           </div>
           <div>
             <h4 className="font-semibold text-brand-900">{review.name}</h4>
@@ -63,7 +50,7 @@ function ReviewCard({ review }: { review: Review }) {
 }
 
 export function Reviews({ initialData }: ReviewsProps) {
-  const [reviews, setReviews] = useState<Review[]>(initialData || [])
+  const [reviews, setReviews] = useState<ReviewType[]>(initialData || [])
   const [loading, setLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
 
@@ -85,14 +72,24 @@ export function Reviews({ initialData }: ReviewsProps) {
             setReviews(apiReviews)
           } else {
             // Use fallback data if no reviews from API
-            setReviews(getFallbackData('reviews') as Review[])
+            const fallbackData = getFallbackData('reviews')
+            if (Array.isArray(fallbackData)) {
+              setReviews(fallbackData as ReviewType[])
+            } else {
+              setReviews([])
+            }
             setError('Using sample reviews - backend not available')
           }
         }
       } catch {
         if (isMounted) {
           // Use fallback data when API fails
-          setReviews(getFallbackData('reviews') as Review[])
+          const fallbackData = getFallbackData('reviews')
+          if (Array.isArray(fallbackData)) {
+            setReviews(fallbackData as ReviewType[])
+          } else {
+            setReviews([])
+          }
           setError('Using sample reviews - backend not available')
         }
       }

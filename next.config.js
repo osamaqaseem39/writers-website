@@ -1,10 +1,7 @@
 /** @ type {import('next').NextConfig} */
 const nextConfig = {
-  // Optimize for production with backend
-  experimental: {
-    // Enable server components
-    serverComponentsExternalPackages: [],
-  },
+  // Server external packages (moved from experimental)
+  serverExternalPackages: [],
   
   // Environment variables
   env: {
